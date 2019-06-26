@@ -1,4 +1,4 @@
-all: ReadFile.scala
+all: ReadFile.class
 
 run:
 	scala ReadFile

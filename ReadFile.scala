@@ -1,6 +1,7 @@
 import scala.io.Source
 import scala.language.reflectiveCalls
-import scala.collection.immutable.HashMap
+import scala.collection.mutable.HashMap
+import scala.util.matching.Regex
 
 
 object Control {
@@ -19,26 +20,24 @@ object Operator extends Enumeration {
   type Operator = Value
   val Addition = Value("+")
   val Subtraction = Value("-")
-  val Multiplication = Value("*")
+  val Multiplication = Value("x")
   val Division = Value("/")
   val Constant = Value(".")
 }
 import Operator._
 
 
-// class Constraint {
-//   var value: Int = 0
-//   var operator: Operator.Val = null
-//
-//   def this(value: Int, operator: Operator.Val) {
-//     this()
-//     this.value = value
-//     this.operator = operator
-//   }
-// }
-// object Constraint {
-//   def
-// }
+class Constraint {
+  var value: Int = 0
+  var operator: Operator = null
+
+  def this(value: Int, operator: Operator) {
+    this()
+    this.value = value
+    this.operator = operator
+  }
+}
+import Constraint._
 
 
 object ReadFile {
@@ -52,17 +51,19 @@ object ReadFile {
 
       var firstLine = lines.next
 
+      val constraintBlobPattern: Regex = "([^=]*)=([0-9]+)([\\+\\-x/\\.])".r
+      val constraintMap: HashMap[Character, Constraint] = HashMap[Character, Constraint]()
+
       for (token <- firstLine.split(" ")) {
-        var t = token.split("=")
-        var cellChar = t(0).charAt(0)
-        var operator = Operator.withName("" + cellChar)
-        println(cellChar)
-        println(operator)
+        val constraintBlobPattern(constraintChar, constraintValue, constraintOperator) = token
+        constraintMap += (constraintChar -> Constraint(constraintValue, constraintOperator))
       }
 
-      for (line <- lines) {
-          println(line)
-      }
+
+      println(constraintMap)
+      // for (line <- lines) {
+      //     println(line)
+      // }
     }
   }
 }
