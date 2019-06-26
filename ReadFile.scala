@@ -22,7 +22,7 @@ object Operator extends Enumeration {
   val Subtraction = Value("-")
   val Multiplication = Value("x")
   val Division = Value("/")
-  val Constant = Value(".")
+  val Constant = Value("")
 }
 import Operator._
 
@@ -36,8 +36,40 @@ class Constraint {
     this.value = value
     this.operator = operator
   }
+
+  override def toString(): String =
+    "" + value + "" + operator
 }
-import Constraint._
+
+class GameState {
+  var constraints: HashMap[Char, Constraint] = null
+  var board: List[List[String]] = null
+
+  def this(constraints: HashMap[Char, Constraint], board: List[List[String]]) {
+    this()
+    this.constraints = constraints
+    this.board = board
+  }
+
+  def boardSize: Int =
+    this.board.length
+
+  def printConstraints() {
+    for ((constraintChar, constraint) <- this.constraints) {
+      println("" + constraintChar + "->" + constraint)
+    }
+  }
+
+  def printBoard() {
+    for (row <- board) {
+      for (cell <- row) {
+        print(cell)
+        print(' ')
+      }
+      println()
+    }
+  }
+}
 
 
 object ReadFile {
@@ -51,19 +83,20 @@ object ReadFile {
 
       var firstLine = lines.next
 
-      val constraintBlobPattern: Regex = "([^=]*)=([0-9]+)([\\+\\-x/\\.])".r
-      val constraintMap: HashMap[Character, Constraint] = HashMap[Character, Constraint]()
+      val constraintBlobPattern: Regex = "([^=]*)=([0-9]+)([\\+\\-x/\\.]?)".r
+      val constraints: HashMap[Char, Constraint] = HashMap[Char, Constraint]()
 
       for (token <- firstLine.split(" ")) {
         val constraintBlobPattern(constraintChar, constraintValue, constraintOperator) = token
-        constraintMap += (constraintChar -> Constraint(constraintValue, constraintOperator))
+        constraints += (constraintChar(0) -> new Constraint(constraintValue.toInt, Operator.withName(constraintOperator)))
       }
 
+      val board = lines.map(line => line.split(" ").toList).toList
 
-      println(constraintMap)
-      // for (line <- lines) {
-      //     println(line)
-      // }
+      val game = new GameState(constraints, board)
+
+      game.printConstraints
+      game.printBoard
     }
   }
 }
