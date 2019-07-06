@@ -1,7 +1,7 @@
-all: ReadFile.class
+all: KenKenSolver.class
 
 run:
-	scala ReadFile
+	scala KenKenSolver
 
 %.class: %.scala
 	scalac $<
