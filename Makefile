@@ -1,12 +1,7 @@
-.PHONY: run
-
-all: classes/main/*.class
+.PHONY: run test
 
 run:
-	scala -classpath classes main.KenKenSolver
+	sbt run
 
-classes:
-	mkdir -p classes
-
-classes/%.class: src/%.scala classes
-	scalac -d classes $<
+test:
+	sbt test
