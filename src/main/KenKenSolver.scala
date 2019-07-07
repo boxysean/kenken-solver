@@ -1,7 +1,11 @@
+package main
+
 import scala.io.Source
 import scala.language.reflectiveCalls
 import scala.collection.mutable.HashMap
 import scala.util.matching.Regex
+
+import main.Util
 
 
 object Control {
@@ -25,10 +29,6 @@ object Operator extends Enumeration {
 import Operator._
 
 
-abstract class CombineState
-
-case class MultiplyCombineState(factors: List[Int], remainingValues: Int, maxValue: Int, currentMultiplier: Int) extends CombineState
-
 class Constraint {
   var value: Int = 0
   var operator: Operator = null
@@ -47,39 +47,7 @@ class Constraint {
   def generatePossibilities(boardSize: Int): List[List[Int]] =
     this.operator match {
       case Operator.Multiplication =>
-        this.combine(MultiplyCombineState(this.factorize(this.value), this.constraintSize, boardSize, 1))
-    }
-
-  def factorize(x: Int): List[Int] =
-    x match {
-      case 1 => List()
-      case y if (y % 2) == 0 => 2 +: this.factorize(x / 2)
-      case y if (y % 3) == 0 => 3 +: this.factorize(x / 3)
-      case y if (y % 5) == 0 => 5 +: this.factorize(x / 5)
-      case y if (y % 7) == 0 => 7 +: this.factorize(x / 7)
-    }
-
-  def combine(state: CombineState): List[List[Int]] =
-    state match {
-      case MultiplyCombineState(_, _, maxValue, currentMultiplier) if currentMultiplier > maxValue => {
-        // println("HERE1 " + state)
-        return Nil
-      }
-      case MultiplyCombineState(List(), remainingValues, _, currentMultiplier) if remainingValues >= 1 => {
-        // println("HERE2 " + state)
-        return List(List(currentMultiplier) ++ List.fill(remainingValues-1)(1))
-      }
-      // case MultiplyCombineState(List(), remainingValues, _, 1) if remainingValues > 1 => {
-      //   return List(List.fill(remainingValues)(1))
-      // }
-      case MultiplyCombineState(factor :: remainingFactors, remainingValues, maxValue, currentMultiplier) => {
-        println(state)
-        return this.combine(MultiplyCombineState(remainingFactors, remainingValues-1, maxValue, factor)).map(combination => currentMultiplier +: combination) ++ this.combine(MultiplyCombineState(remainingFactors, remainingValues, maxValue, currentMultiplier * factor)).map(combination => combination)
-      }
-      case _ => {
-        // println("HERE3 " + state)
-        return Nil
-      }
+        Util.combine(MultiplyCombineState(Util.factorize(this.value), this.constraintSize, boardSize, 1))
     }
 }
 
@@ -239,7 +207,7 @@ object KenKenSolver {
   }
 
   def solve(gameState: GameState) {
-    println(gameState.constraints('a').factorize(6))
+    println(Util.factorize(6))
     println(gameState.constraints('e').generatePossibilities(gameState.boardSize))
   }
 

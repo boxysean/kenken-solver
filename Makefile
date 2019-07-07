@@ -1,7 +1,12 @@
-all: KenKenSolver.class
+.PHONY: run
+
+all: classes/main/*.class
 
 run:
-	scala KenKenSolver
+	scala -classpath classes main.KenKenSolver
 
-%.class: %.scala
-	scalac $<
+classes:
+	mkdir -p classes
+
+classes/%.class: src/%.scala classes
+	scalac -d classes $<
