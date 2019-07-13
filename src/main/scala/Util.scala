@@ -1,5 +1,6 @@
 package main
 
+
 object Util {
   def factorize(x: Int): List[Int] =
     x match {
