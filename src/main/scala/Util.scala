@@ -67,4 +67,17 @@ object Util {
       .map(value => List(value, value / targetValue).sorted)
       .toList
 
+  def generatePossibilities(constraint: Constraint, constraintSize: Int, boardSize: Int): List[List[Int]] =
+    constraint.operator match {
+      case Operator.Multiplication =>
+        Util.multiplicationCombinations(constraintSize, boardSize, constraint.value)
+      case Operator.Addition =>
+        Util.additionCombinations(constraintSize, boardSize, constraint.value)
+      case Operator.Subtraction =>
+        Util.subtractionCombinations(boardSize, constraint.value)
+      case Operator.Division =>
+        Util.divisionCombinations(boardSize, constraint.value)
+      case Operator.Constant =>
+        List(List(constraint.value))
+    }
 }

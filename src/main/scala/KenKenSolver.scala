@@ -18,69 +18,26 @@ object Control {
 }
 
 object KenKenSolver {
-  def getConstraintCellLocations(board: Array[Array[Char]], constraint: Char, row: Int, column: Int, visited: Array[Array[Boolean]]): List[(Int, Int)] = {
-    var cellLocations = List((row, column))
-    visited(row)(column) = true
+  def parseConstraintLine(constraintLine: String): List[Constraint] = {
+    val constraintBlobPattern: Regex = "([^=]*)=([0-9]+)([\\+\\-x/\\.]?)".r
 
-    for ((dr, dc) <- List(-1, 0, 1, 0) zip List(0, 1, 0, -1)) {
-      if (0 <= row + dr && row + dr < board.length
-        && 0 <= column + dc && column + dc < board.length
-        && board(row + dr)(column + dc) == constraint
-        && !visited(row + dr)(column + dc)
-      ) {
-        cellLocations = cellLocations ++ getConstraintCellLocations(board, constraint, row + dr, column + dc, visited)
-      }
-    }
-
-    return cellLocations
+    constraintLine.split(" ").map(token => token match {
+      case constraintBlobPattern(name, value, operator) => new Constraint(name(0), value.toInt, Operator.withName(operator))
+      case _ => throw new Exception("Parse error")
+    }).toList
   }
 
+  def parseBoard(boardLines: Iterator[String]): Array[Array[Char]] =
+    boardLines.map(line =>
+      line.split(" ").map(charStr =>
+        charStr(0)
+      )
+    ).toArray
 
   def parseFile(fileName: String): GameState = {
     Control.using(Source.fromFile(fileName)) { source =>
       var lines = source.getLines
-      var firstLine = lines.next
-
-      val board = lines.map(line =>
-        line.split(" ").map(charStr =>
-          charStr(0)
-        )
-      ).toArray
-
-      val constraintCellLocations: HashMap[Char, List[(Int, Int)]] = HashMap[Char, List[(Int, Int)]]()
-
-      for (row <- 0 to board.length-1) {
-        for (column <- 0 to board.length-1) {
-          if (!constraintCellLocations.contains(board(row)(column))) {
-            constraintCellLocations += (
-              board(row)(column) ->
-              this.getConstraintCellLocations(board, board(row)(column), row, column, Array.ofDim[Boolean](board.length, board.length))
-            )
-          }
-        }
-      }
-
-      val constraintBlobPattern: Regex = "([^=]*)=([0-9]+)([\\+\\-x/\\.]?)".r
-      val constraints: HashMap[Char, Constraint] = HashMap[Char, Constraint]()
-
-      for (token <- firstLine.split(" ")) {
-        val constraintBlobPattern(constraintChar, constraintValue, constraintOperator) = token
-        constraints += (
-          constraintChar(0) ->
-          new Constraint(constraintValue.toInt, Operator.withName(constraintOperator), constraintCellLocations(constraintChar(0)), board.length)
-        )
-      }
-
-      val initPossibilities = Array.ofDim[List[Int]](board.length, board.length)
-
-      for (row <- 0 to board.length-1) {
-        for (column <- 0 to board.length-1) {
-          val constraint = constraints(board(row)(column))
-          initPossibilities(row)(column) = constraint.possibleValuesOfCell
-        }
-      }
-
-      return new GameState(constraints, board, initPossibilities, Array.ofDim[Boolean](board.length, board.length))
+      return GameState(parseConstraintLine(lines.next), parseBoard(lines))
     }
   }
 

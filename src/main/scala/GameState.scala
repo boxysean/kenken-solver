@@ -9,19 +9,12 @@ import main.Operator
 import main.Constraint
 
 
-class GameState {
-  var constraints: HashMap[Char, Constraint] = null
-  var board: Array[Array[Char]] = null
-  var cellPossibilities: Array[Array[List[Int]]] = null
-  var placed: Array[Array[Boolean]] = null
-
-  def this(constraints: HashMap[Char, Constraint], board: Array[Array[Char]], cellPossibilities: Array[Array[List[Int]]], placed: Array[Array[Boolean]]) {
-    this()
-    this.constraints = constraints
-    this.board = board
-    this.cellPossibilities = cellPossibilities
-    this.placed = placed
-  }
+class GameState (
+  val constraints: HashMap[Char, GameConstraintState],
+  val board: Array[Array[Char]],
+  val cellPossibilities: Array[Array[List[Int]]],
+  val placed: Array[Array[Boolean]]
+) {
 
   def boardSize: Int =
     this.board.length
@@ -69,6 +62,14 @@ class GameState {
       if this.cellPossibilities(row)(column).length == 1 && !this.placed(row)(column)
     } yield (row, column)
 
+  def reducePossibilities(): GameState = {
+    val newGameState: GameState = this.clone
+
+    // for
+
+    return newGameState
+  }
+
   def solve(): GameState = {
     if (this.isSolved) {
       return this
@@ -78,7 +79,7 @@ class GameState {
     // 1. Try to place cells
     // 2. If 1 worked, return to 1
 
-    val ncp = newCellPlacements()
+    val ncp = this.newCellPlacements
 
     if (ncp.length > 0) {
       return this.place(ncp(0)._1, ncp(0)._2)
@@ -87,6 +88,9 @@ class GameState {
     return null
 
     // 3. Try to reduce cell possibilities based on row and column scans
+
+
+
     // 4. If 3 worked, return to 1
     // 5. Cycle through the constraints, trying to reduce the constraint possibilities, which in turn reduces cell possibilities
     // 6. If 5 worked, return to 1
@@ -137,9 +141,33 @@ class GameState {
 
 object GameState {
   def apply(
-    constraints: HashMap[Char, Constraint],
+    constraints: HashMap[Char, GameConstraintState],
     board: Array[Array[Char]],
     cellPossibilities: Array[Array[List[Int]]],
     placed: Array[Array[Boolean]]
   ): GameState = new GameState(constraints, board, cellPossibilities, placed)
+
+  def apply(
+    constraints: List[Constraint],
+    board: Array[Array[Char]]
+  ): GameState = {
+    val initPossibilities = Array.ofDim[List[Int]](board.length, board.length)
+    val gameConstraintStates = HashMap[Char, GameConstraintState]()
+
+    for (constraint <- constraints) {
+      gameConstraintStates += (
+        constraint.name
+        -> constraint.getGameConstraintState(board)
+      )
+    }
+
+    for (row <- 0 to board.length-1) {
+      for (column <- 0 to board.length-1) {
+        val constraint = gameConstraintStates(board(row)(column))
+        initPossibilities(row)(column) = constraint.possibleValuesOfCell
+      }
+    }
+
+    return new GameState(gameConstraintStates, board, initPossibilities, Array.ofDim[Boolean](board.length, board.length))
+  }
 }
