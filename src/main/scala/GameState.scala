@@ -12,7 +12,7 @@ import main.Constraint
 class GameState (
   val constraints: HashMap[Char, GameConstraintState],
   val board: Array[Array[Char]],
-  val cellPossibilities: Array[Array[List[Int]]],
+  val cellPossibilities: Array[Array[Set[Int]]],
   val placed: Array[Array[Boolean]]
 ) {
 
@@ -28,7 +28,7 @@ class GameState (
   def place(placeRow: Int, placeColumn: Int): GameState = {
     val newGameState: GameState = this.clone
 
-    assert(this.cellPossibilities(placeRow)(placeColumn).length == 0)
+    assert(this.cellPossibilities(placeRow)(placeColumn).size == 1)
 
     val value = this.cellPossibilities(placeRow)(placeColumn)(0)
 
@@ -52,20 +52,45 @@ class GameState (
   def isSolved(): Boolean =
     !this.cellPossibilities
       .flatten
-      .filter(possibility => possibility.length != 1)
+      .filter(possibility => possibility.size != 1)
       .isEmpty
 
   def newCellPlacements(): Seq[(Int, Int)] =
     for {
       row <- 0 to this.boardSize-1
       column <- 0 to this.boardSize-1
-      if this.cellPossibilities(row)(column).length == 1 && !this.placed(row)(column)
+      if this.cellPossibilities(row)(column).size == 1 && !this.placed(row)(column)
     } yield (row, column)
 
   def reducePossibilities(): GameState = {
     val newGameState: GameState = this.clone
 
-    // for
+    // Histogram of possibilities, for each cell in a row
+
+    for (row <- 0 to newGameState.boardSize-1) {
+      val histogram = new HashMap[Set[Int], Int]() { override def default(key: Set[Int]) = 0 }
+      // val newCellPossibilities = new
+
+      for (column <- 0 to newGameState.boardSize-1) {
+        histogram(newGameState.cellPossibilities(row)(column)) += 1
+      }
+
+      var killEm = Vector[Set[Int]]()
+
+      for ((possibilities, count) <- histogram) {
+        if (possibilities.size == count) {
+          killEm = killEm :+ possibilities
+        }
+      }
+
+      for (killPossibilities <- killEm) {
+        for (column <- 0 to this.boardSize-1) {
+          if (newGameState.cellPossibilities(row)(column) != killPossibilities) {
+            newGameState.cellPossibilities(row)(column) = newGameState.cellPossibilities(row)(column).filterNot(killPossibilities)
+          }
+        }
+      }
+    }
 
     return newGameState
   }
@@ -143,7 +168,7 @@ object GameState {
   def apply(
     constraints: HashMap[Char, GameConstraintState],
     board: Array[Array[Char]],
-    cellPossibilities: Array[Array[List[Int]]],
+    cellPossibilities: Array[Array[Set[Int]]],
     placed: Array[Array[Boolean]]
   ): GameState = new GameState(constraints, board, cellPossibilities, placed)
 
@@ -151,14 +176,11 @@ object GameState {
     constraints: List[Constraint],
     board: Array[Array[Char]]
   ): GameState = {
-    val initPossibilities = Array.ofDim[List[Int]](board.length, board.length)
+    val initPossibilities = Array.ofDim[Set[Int]](board.length, board.length)
     val gameConstraintStates = HashMap[Char, GameConstraintState]()
 
     for (constraint <- constraints) {
-      gameConstraintStates += (
-        constraint.name
-        -> constraint.getGameConstraintState(board)
-      )
+      gameConstraintStates += (constraint.name -> constraint.getGameConstraintState(board))
     }
 
     for (row <- 0 to board.length-1) {

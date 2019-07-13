@@ -8,10 +8,10 @@ import main.GameState
 
 class GameStateTest extends FunSuite {
   test("GameState.newCellPlacements") {
-    val constraints = List(Constraint('a', 1, Operator.Constant))
-    val board = Array(Array('a'))
-
-    val gameState = GameState(constraints, board)
+    val gameState = GameState(
+      List(Constraint('a', 1, Operator.Constant)),
+      Array(Array('a'))
+    )
 
     assert(gameState.newCellPlacements === Seq((0, 0)))
   }
@@ -22,16 +22,18 @@ class GameStateTest extends FunSuite {
       312
       231
     */
-    val constraints = List(
+    val gameState = GameState(List(
       Constraint('a', 3, Operator.Addition),
       Constraint('b', 6, Operator.Addition),
       Constraint('c', 9, Operator.Addition)
-    )
-    
-    val board = Array(Array('a', 'a', 'b'), Array('c', 'c', 'b'), Array('c', 'c', 'b'))
+    ), Array(
+      Array('a', 'a', 'b'),
+      Array('c', 'c', 'b'),
+      Array('c', 'c', 'b')
+    )).reducePossibilities
 
-    val gameState = GameState(constraints, board).reducePossibilities
-
-    assert(gameState.cellPossibilities(2)(2) === Seq(3))
+    assert(gameState.cellPossibilities(0)(0) === Set(1, 2))
+    assert(gameState.cellPossibilities(0)(1) === Set(1, 2))
+    assert(gameState.cellPossibilities(0)(2) === Set(3))
   }
 }

@@ -24,10 +24,11 @@ class GameConstraintState(
   def constraintSize(): Int =
     this.cellLocations.length
 
-  def possibleValuesOfCell(): List[Int] =
+  def possibleValuesOfCell(): Set[Int] =
     this.possibleCombinations
       .flatten
       .distinct
+      .toSet
 }
 
 object GameConstraintState {
