@@ -87,8 +87,11 @@ object KenKenSolver {
   def main(args: Array[String]): Unit = {
     var gameState = this.parseFile("kenken1.in")
     gameState.printConstraints
+    println()
     gameState.printBoard
-    gameState.printPlacements
+    println()
+    println(gameState)
+    println()
     println(gameState.solve)
   }
 }

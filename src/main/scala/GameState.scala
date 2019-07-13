@@ -113,18 +113,7 @@ class GameState {
   }
 
   def printPlacements() {
-    for (row <- 0 to board.length-1) {
-      for (column <- 0 to board.length-1) {
-        val cell = cellPossibilities(row)(column)
-        if (cell.length > 1) {
-          print(". ")
-        } else {
-          print(cell(0))
-          print(' ')
-        }
-      }
-      println()
-    }
+    println(this.toString)
   }
 
   def printPossibilities() {
@@ -136,6 +125,14 @@ class GameState {
       println()
     }
   }
+
+  override def toString =
+    this.cellPossibilities.map(row =>
+      row.map(possibilities => possibilities match {
+        case List(x) => x.toString
+        case _ => "."
+      }).mkString(" ")
+    ).mkString("\n")
 }
 
 object GameState {
