@@ -10,9 +10,6 @@ import main.Constraint
 
 
 class GameState {
-
-  import GameState._
-
   var constraints: HashMap[Char, Constraint] = null
   var board: Array[Array[Char]] = null
   var cellPossibilities: Array[Array[List[Int]]] = null
