@@ -19,11 +19,15 @@ object Util {
       case (listA, listB) if listA(0) == listB(0) => listCompare(listA.drop(1), listB.drop(1))
     }
 
+  def notPossible(combination: List[Int]): Boolean =
+    combination.length >= 2 && combination.toSet.size == 1 // All values of a combination are the same
+
   def multiplicationCombinations(remainingValues: Int, maxValue: Int, targetValue: Int): List[List[Int]] =
     multiplicationCombinations(factorize(targetValue), remainingValues, maxValue, 1)
       .map(combination => combination.sorted)
       .sortWith((listA, listB) => listCompare(listA, listB))
       .distinct
+      .filterNot(combination => notPossible(combination))
 
   def multiplicationCombinations(factors: List[Int], remainingValues: Int, maxValue: Int, currentMultiplier: Int): List[List[Int]] =
     (factors, remainingValues, maxValue, currentMultiplier) match {
@@ -42,6 +46,7 @@ object Util {
 
   def additionCombinations(remainingValues: Int, maxValue: Int, targetValue: Int): List[List[Int]] =
     additionCombinations(remainingValues, maxValue, targetValue, 1)
+      .filterNot(combination => notPossible(combination))
 
   def additionCombinations(remainingValues: Int, maxValue: Int, targetValue: Int, highestValue: Int): List[List[Int]] =
     (remainingValues, maxValue, targetValue, highestValue) match {
@@ -59,12 +64,14 @@ object Util {
     (1 until maxValue + 1)
       .filter(lowerValue => targetValue + lowerValue <= maxValue)
       .map(lowerValue => List(lowerValue, targetValue + lowerValue))
+      .filterNot(combination => notPossible(combination))
       .toList
 
   def divisionCombinations(maxValue: Int, targetValue: Int): List[List[Int]] =
     (1 until maxValue + 1)
       .filter(value => (value / targetValue) * targetValue == value)
       .map(value => List(value, value / targetValue).sorted)
+      .filterNot(combination => notPossible(combination))
       .toList
 
   def generatePossibilities(constraint: Constraint, constraintSize: Int, boardSize: Int): List[List[Int]] =

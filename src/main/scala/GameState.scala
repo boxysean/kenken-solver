@@ -50,7 +50,7 @@ class GameState (
   }
 
   def isSolved(): Boolean =
-    !this.cellPossibilities
+    this.cellPossibilities
       .flatten
       .filter(possibility => possibility.size != 1)
       .isEmpty
@@ -64,38 +64,55 @@ class GameState (
 
   def reducePossibilities(): GameState = {
     val newGameState: GameState = this.clone
-
-    // Histogram of possibilities, for each cell in a row
+    var modified = false
 
     for (row <- 0 to newGameState.boardSize-1) {
       val histogram = new HashMap[Set[Int], Int]() { override def default(key: Set[Int]) = 0 }
-      // val newCellPossibilities = new
 
       for (column <- 0 to newGameState.boardSize-1) {
         histogram(newGameState.cellPossibilities(row)(column)) += 1
       }
 
-      var killEm = Vector[Set[Int]]()
-
-      for ((possibilities, count) <- histogram) {
-        if (possibilities.size == count) {
-          killEm = killEm :+ possibilities
-        }
-      }
-
-      for (killPossibilities <- killEm) {
-        for (column <- 0 to this.boardSize-1) {
-          if (newGameState.cellPossibilities(row)(column) != killPossibilities) {
-            newGameState.cellPossibilities(row)(column) = newGameState.cellPossibilities(row)(column).filterNot(killPossibilities)
+      for ((possibilities, count) <- histogram if possibilities.size == count) {
+        for (column <- 0 to newGameState.boardSize-1) {
+          if (newGameState.cellPossibilities(row)(column) != possibilities) {
+            modified = modified || newGameState.cellPossibilities(row)(column).intersect(possibilities).size > 0
+            newGameState.cellPossibilities(row)(column) = newGameState.cellPossibilities(row)(column).filterNot(possibilities)
           }
         }
       }
     }
 
-    return newGameState
+    for (column <- 0 to newGameState.boardSize-1) {
+      val histogram = new HashMap[Set[Int], Int]() { override def default(key: Set[Int]) = 0 }
+
+      for (row <- 0 to newGameState.boardSize-1) {
+        histogram(newGameState.cellPossibilities(row)(column)) += 1
+      }
+
+      for ((possibilities, count) <- histogram if possibilities.size == count) {
+        for (row <- 0 to newGameState.boardSize-1) {
+          if (newGameState.cellPossibilities(row)(column) != possibilities) {
+            modified = modified || newGameState.cellPossibilities(row)(column).intersect(possibilities).size > 0
+            newGameState.cellPossibilities(row)(column) = newGameState.cellPossibilities(row)(column).filterNot(possibilities)
+          }
+        }
+      }
+    }
+
+    if (modified) {
+      return newGameState
+    } else {
+      return null
+    }
   }
 
   def solve(): GameState = {
+    println("HERE")
+    println(this)
+    this.printPossibilities
+    println()
+
     if (this.isSolved) {
       return this
     }
@@ -103,18 +120,24 @@ class GameState (
     // While not solved...
     // 1. Try to place cells
     // 2. If 1 worked, return to 1
+    // I actually think #3 will cover this!
 
-    val ncp = this.newCellPlacements
-
-    if (ncp.length > 0) {
-      return this.place(ncp(0)._1, ncp(0)._2)
-    }
-
-    return null
+    // val ncp = this.newCellPlacements
+    //
+    // if (ncp.length > 0) {
+    //   return this.place(ncp(0)._1, ncp(0)._2).solve
+    // }
 
     // 3. Try to reduce cell possibilities based on row and column scans
 
+    val reduce = this.reducePossibilities
 
+    if (reduce != null) {
+      print("YUP")
+      return reduce.solve
+    }
+
+    return null
 
     // 4. If 3 worked, return to 1
     // 5. Cycle through the constraints, trying to reduce the constraint possibilities, which in turn reduces cell possibilities

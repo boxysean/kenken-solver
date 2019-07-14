@@ -22,13 +22,13 @@ class UtilTest extends FunSuite {
   }
 
   test("Util.additionCombinations") {
-    assert(Util.additionCombinations(2, 5, 4) === List(List(1, 3), List(2, 2)))
+    assert(Util.additionCombinations(2, 5, 4) === List(List(1, 3)))
     assert(Util.additionCombinations(2, 5, 5) === List(List(1, 4), List(2, 3)))
     assert(Util.additionCombinations(3, 6, 4) === List(List(1, 1, 2)))
     assert(Util.additionCombinations(3, 6, 16) === List(List(4, 6, 6), List(5, 5, 6)))
     assert(Util.additionCombinations(3, 6, 11) === List(List(1, 4, 6), List(1, 5, 5), List(2, 3, 6), List(2, 4, 5), List(3, 3, 5), List(3, 4, 4)))
-    assert(Util.additionCombinations(3, 6, 12) === List(List(1, 5, 6), List(2, 4, 6), List(2, 5, 5), List(3, 3, 6), List(3, 4, 5), List(4, 4, 4)))
-    assert(Util.additionCombinations(2, 6, 8) === List(List(2, 6), List(3, 5), List(4, 4)))
+    assert(Util.additionCombinations(3, 6, 12) === List(List(1, 5, 6), List(2, 4, 6), List(2, 5, 5), List(3, 3, 6), List(3, 4, 5)))
+    assert(Util.additionCombinations(2, 6, 8) === List(List(2, 6), List(3, 5)))
   }
 
   test("Util.subtractionCombinations") {
