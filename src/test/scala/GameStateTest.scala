@@ -31,7 +31,7 @@ class GameStateTest extends FunSuite {
       Array('a', 'a', 'b'),
       Array('c', 'd', 'b'),
       Array('c', 'd', 'b')
-    )).reducePossibilities
+    )).reduceCellPossibilities
 
     assert(gameState.cellPossibilities(0)(0) === Set(1))
     assert(gameState.cellPossibilities(0)(1) === Set(2))

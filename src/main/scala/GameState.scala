@@ -62,7 +62,7 @@ class GameState (
       if this.cellPossibilities(row)(column).size == 1 && !this.placed(row)(column)
     } yield (row, column)
 
-  def reducePossibilities(): GameState = {
+  def reduceCellPossibilities(): GameState = {
     val newGameState: GameState = this.clone
     var modified = false
 
@@ -107,6 +107,25 @@ class GameState (
     }
   }
 
+  def reduceConstraintPossibilities(): GameState = {
+    val newGameState: GameState = this.clone
+    var modified = false
+
+    // for (constraint <- newGameState.constraints.values) {
+    //   var cellPossibilities = Set[Int]()
+    //   for ((cellRow, cellColumn) <- constraint.cellLocations) {
+    //     cellPossibilities = cellPossibilities.union(newGameState.cellPossibilities)
+    //
+    //   }
+    // }
+
+    if (modified) {
+      return newGameState
+    } else {
+      return null
+    }
+  }
+
   def solve(): GameState = {
     println("HERE")
     println(this)
@@ -118,30 +137,26 @@ class GameState (
     }
 
     // While not solved...
-    // 1. Try to place cells
-    // 2. If 1 worked, return to 1
-    // I actually think #3 will cover this!
 
-    // val ncp = this.newCellPlacements
-    //
-    // if (ncp.length > 0) {
-    //   return this.place(ncp(0)._1, ncp(0)._2).solve
-    // }
-
-    // 3. Try to reduce cell possibilities based on row and column scans
-
-    val reduce = this.reducePossibilities
+    // 1. Try to reduce cell possibilities based on row and column scans
+    val reduce = this.reduceCellPossibilities
 
     if (reduce != null) {
-      print("YUP")
+      // 2. If 3 worked, return to 1
       return reduce.solve
+    }
+
+    // 5. Cycle through the constraints, trying to reduce the constraint possibilities, which in turn reduces cell possibilities
+    // 6. If 5 worked, return to 1
+
+    val reduce2 = this.reduceConstraintPossibilities
+
+    if (reduce2 != null) {
+      return reduce2.solve
     }
 
     return null
 
-    // 4. If 3 worked, return to 1
-    // 5. Cycle through the constraints, trying to reduce the constraint possibilities, which in turn reduces cell possibilities
-    // 6. If 5 worked, return to 1
     // 7. Try a constraint possibility
     // 8. If a contradiction is found, eliminate the constraint possibility, reduce cell possibilities, and return to 1
     // 9. If a solution is found, that's it!
@@ -180,7 +195,7 @@ class GameState (
 
   override def toString =
     this.cellPossibilities.map(row =>
-      row.map(possibilities => possibilities match {
+      row.map(possibilities => possibilities.toList match {
         case List(x) => x.toString
         case _ => "."
       }).mkString(" ")

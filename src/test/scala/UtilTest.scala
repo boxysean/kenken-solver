@@ -46,4 +46,12 @@ class UtilTest extends FunSuite {
     assert(Util.divisionCombinations(6, 5) === List(List(1, 5)))
     assert(Util.divisionCombinations(6, 6) === List(List(1, 6)))
   }
+
+  test("Util.combinationIsPossible") {
+    assert(Util.combinationIsPossible(List(1, 2), List(Set(1, 2), Set(1, 2))))
+    assert(Util.combinationIsPossible(List(1, 2), List(Set(2), Set(1))))
+    assert(Util.combinationIsPossible(List(2, 1, 3), List(Set(1), Set(3), Set(1, 2))))
+    assert(Util.combinationIsPossible(List(1, 2), List(Set(1, 2), Set(1, 3))))
+    assert(!Util.combinationIsPossible(List(1, 3), List(Set(1, 2), Set(1, 2))))
+  }
 }

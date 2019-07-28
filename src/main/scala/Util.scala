@@ -1,5 +1,8 @@
 package main
 
+import scala.collection.BitSet
+import scala.collection.mutable.Map
+
 
 object Util {
   def factorize(x: Int): List[Int] =
@@ -87,4 +90,47 @@ object Util {
       case Operator.Constant =>
         List(List(constraint.value))
     }
+
+  def setCompare(setA: Set[Int], setB: Set[Int]): Boolean =
+    listCompare(setA.toList.sorted, setB.toList.sorted)
+
+  def combinationIsPossible(combination: List[Int], cellPossibilities: List[Set[Int]]): Boolean = {
+    /**
+     * Take this combination: (2, 1, 3)
+     * And take these possibilities (A={1}, B={3}, C={1, 2})
+     *
+     * The answer is "Yes, this combination is possible"
+     * because 2 in {1, 2} && 1 in {1} && 3 in {3}.
+     *
+     * The challenge is to make this function work invariant on the permutation
+     * of all possibilities. This is done by sorting the combination and
+     * possibilities so the lowest numbers in the combination are matched with the.
+     */
+    val cache = Map.empty[(Int, BitSet), Boolean]
+    // Initialize the true condition: when all combinations and cellPossibilities
+    // have been selected
+    cache.update((combination.size, BitSet(0 to cellPossibilities.size-1: _*)), true)
+    combinationIsPossible(combination.sorted, cellPossibilities, 0, BitSet(), cache)
+  }
+
+  def combinationIsPossible(combination: List[Int], cellPossibilities: List[Set[Int]], combinationIdx: Int, cellPossibilitiesPicked: BitSet, cache: Map[(Int, BitSet), Boolean]): Boolean =
+    cache.getOrElseUpdate(
+      (combinationIdx, cellPossibilitiesPicked),
+      cellPossibilities
+        .filter(possibility => !cellPossibilitiesPicked(
+          cellPossibilities.indexWhere(thisPossibility => thisPossibility eq possibility))
+        )  // Filter out picked possibilities
+        .filter(possibility => possibility.contains(combination(combinationIdx)))  // Filter out possibilities that don't work
+        .exists(
+          possibility => combinationIsPossible(
+            combination,
+            cellPossibilities,
+            combinationIdx + 1,
+            cellPossibilitiesPicked.union(
+              BitSet(cellPossibilities.indexWhere(thisPossibility => thisPossibility eq possibility))  // Referential equality
+            ),
+            cache
+          )
+        )
+    )
 }
