@@ -46,9 +46,8 @@ object KenKenSolver {
     gameState.printConstraints
     println()
     gameState.printBoard
-    // println()
-    // println(gameState)
-    println()
-    println(gameState.solve)
+    val theSolvedBoard = gameState.solve
+    println("SOLVED ಡ_ಡ")
+    println(theSolvedBoard)
   }
 }
