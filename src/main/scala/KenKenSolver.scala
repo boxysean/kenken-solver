@@ -42,7 +42,7 @@ object KenKenSolver {
   }
 
   def main(args: Array[String]): Unit = {
-    var gameState = this.parseFile("kenken1.in")
+    var gameState = this.parseFile("kenken-20190728-7x7.in")
     gameState.printConstraints
     println()
     gameState.printBoard

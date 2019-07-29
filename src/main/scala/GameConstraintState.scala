@@ -19,7 +19,7 @@ class GameConstraintState(
 ) extends Constraint(name, value, operator) {
 
   override def toString(): String =
-    "" + value + "" + operator + " (size: " + this.constraintSize + ")"
+    "" + name + "=" + value + "" + operator + " (size: " + this.constraintSize + ")"
 
   def constraintSize(): Int =
     this.cellLocations.length
@@ -29,6 +29,20 @@ class GameConstraintState(
       .flatten
       .distinct
       .toSet
+
+  def isFullyPlaced(gameState: GameState): Boolean =
+    this.cellLocations.map(x => x match {
+      case (row, column) => (gameState.cellPossibilities(row)(column).size == 1)
+    }).forall(_ == true)
+
+  def placementIsLegal(gameState: GameState): Boolean = {
+    val placement: List[Int] = this.cellLocations.map(x => x match {
+      case (row, column) => gameState.cellPossibilities(row)(column).head
+    }).sorted
+    val r = this.possibleCombinations.contains(placement)
+    // println("" + this + " " + r + " " + this.possibleCombinations + " " + placement)
+    return r
+  }
 }
 
 object GameConstraintState {

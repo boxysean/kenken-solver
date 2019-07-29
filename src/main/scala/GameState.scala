@@ -26,54 +26,36 @@ class GameState (
   override def clone(): GameState =
     new GameState(constraints, board.map(_.clone), cellPossibilities.map(_.clone), placed.map(_.clone))
 
-  // def place(placeRow: Int, placeColumn: Int): GameState = {
-  //   val newGameState: GameState = this.clone
-  //
-  //   assert(this.cellPossibilities(placeRow)(placeColumn).size == 1)
-  //
-  //   val value: Int = this.cellPossibilities(placeRow)(placeColumn).head  // First element
-  //
-  //   for (row <- 0 to this.boardSize-1) {
-  //     if (row != placeRow) {
-  //       newGameState.cellPossibilities(row)(placeColumn) = this.cellPossibilities(row)(placeColumn).filter(_ != value)
-  //     }
-  //   }
-  //
-  //   for (column <- 0 to this.boardSize-1) {
-  //     if (column != placeColumn) {
-  //       newGameState.cellPossibilities(placeRow)(column) = this.cellPossibilities(placeRow)(column).filter(_ != value)
-  //     }
-  //   }
-  //
-  //   newGameState.placed(placeRow)(placeColumn) = true
-  //
-  //   return newGameState
-  // }
-  //
   def isSolved(): Boolean =
     this.cellPossibilities
       .flatten
       .filter(possibility => possibility.size != 1)
       .isEmpty
 
-  def isImpossible(): Boolean =
-    !this.cellPossibilities
+  def allCellsHaveAChoice(): Boolean =
+    this.cellPossibilities
       .flatten
       .filter(possibility => possibility.size == 0)
       .isEmpty
 
-  // def newCellPlacements(): Seq[(Int, Int)] =
-  //   for {
-  //     row <- 0 to this.boardSize-1
-  //     column <- 0 to this.boardSize-1
-  //     if this.cellPossibilities(row)(column).size == 1 && !this.placed(row)(column)
-  //   } yield (row, column)
+  def allPlacementsAreLegal(): Boolean =
+    this.constraints
+      .values
+      .filter(_.isFullyPlaced(this))
+      .forall(_.placementIsLegal(this))
+
+  def isPossible(): Boolean =
+    this.allCellsHaveAChoice && this.allPlacementsAreLegal
 
   def reduceCellPossibilities(): GameState = {
     println("REDUCING ( ｀皿´)｡ﾐ/")
 
     val newGameState: GameState = this.clone
     var modified = false
+
+    // For each row, count how many similar sets of possibilities there are.
+    // If there are the same number of sets as the number of elements in the set
+    // then go ahead and remove those elements from the other cells in the row.
 
     for (row <- 0 to newGameState.boardSize-1) {
       val histogram = new HashMap[Set[Int], ArrayBuffer[(Int, Int)]]()
@@ -83,24 +65,13 @@ class GameState (
           histogram(newGameState.cellPossibilities(row)(column)) = new ArrayBuffer()
         }
         histogram(newGameState.cellPossibilities(row)(column)) += ((row, column))
-
-        // if (histogram(newGameState.cellPossibilities(row)(column)).size > newGameState.cellPossibilities(row)(column).size) {
-        //   println("CONTRADICTION")
-        //   newGameState.printPossibilities
-        //   return null
-        // }
       }
 
       for ((possibilities, cells) <- histogram if possibilities.size == cells.size) {
-        // println("YEP ROW", possibilities, cells)
         for (column <- 0 to newGameState.boardSize-1) {
-          // println("checking...", row, column)
           if (!cells.contains((row, column))) {
-            // println("yaya?...", row, column, newGameState.cellPossibilities(row)(column))
-            // println(newGameState.cellPossibilities(row)(column).intersect(possibilities))
             modified = modified || (newGameState.cellPossibilities(row)(column).intersect(possibilities).size > 0)
             newGameState.cellPossibilities(row)(column) = newGameState.cellPossibilities(row)(column).filterNot(possibilities)
-            // println(newGameState.cellPossibilities(row)(column))
           }
         }
       }
@@ -114,16 +85,9 @@ class GameState (
           histogram(newGameState.cellPossibilities(row)(column)) = new ArrayBuffer()
         }
         histogram(newGameState.cellPossibilities(row)(column)) += ((row, column))
-
-        // if (histogram(newGameState.cellPossibilities(row)(column)).size > newGameState.cellPossibilities(row)(column).size) {
-        //   println("CONTRADICTION")
-        //   newGameState.printPossibilities
-        //   return null
-        // }
       }
 
       for ((possibilities, cells) <- histogram if possibilities.size == cells.size) {
-        // println("YEP COLUMN", possibilities, cells)
         for (row <- 0 to newGameState.boardSize-1) {
           if (!cells.contains((row, column))) {
             modified = modified || (newGameState.cellPossibilities(row)(column).intersect(possibilities).size > 0)
@@ -132,25 +96,6 @@ class GameState (
         }
       }
     }
-
-    if (modified) {
-      return newGameState
-    } else {
-      return null
-    }
-  }
-
-  def reduceConstraintPossibilities(): GameState = {
-    val newGameState: GameState = this.clone
-    var modified = false
-
-    // for (constraint <- newGameState.constraints.values) {
-    //   var cellPossibilities = Set[Int]()
-    //   for ((cellRow, cellColumn) <- constraint.cellLocations) {
-    //     cellPossibilities = cellPossibilities.union(newGameState.cellPossibilities)
-    //
-    //   }
-    // }
 
     if (modified) {
       return newGameState
@@ -188,36 +133,31 @@ class GameState (
   def solve(): GameState = {
     println("Solve cycle \\_(-_-)_/")
 
+    println(this)
+    println()
+    this.printPossibilities
+    println()
+
+    if (!this.isPossible) {
+      println("NOT POSSIBLE (̿▀̿ ̿Ĺ̯̿̿▀̿ ̿)̄", this.allCellsHaveAChoice, this.allPlacementsAreLegal)
+      return null
+    }
+
     if (this.isSolved) {
       return this
     }
 
-    if (this.isImpossible) {
-      return null
-    }
+    // - Try to reduce cell possibilities based on row and column scans
 
-    // While not solved...
-
-    // 1. Try to reduce cell possibilities based on row and column scans
     val reduce = this.reduceCellPossibilities
 
     if (reduce != null) {
-      // 2. If 3 worked, return to 1
       return reduce.solve
     }
 
-    // 5. Cycle through the constraints, trying to reduce the constraint possibilities, which in turn reduces cell possibilities
-    // 6. If 5 worked, return to 1
-
-    val reduce2 = this.reduceConstraintPossibilities
-
-    if (reduce2 != null) {
-      return reduce2.solve
-    }
-
-    // 7. Try a constraint possibility
-    // 8. If a contradiction is found, eliminate the constraint possibility, reduce cell possibilities, and return to 1
-    // 9. If a solution is found, that's it!
+    // - Try a constraint possibility
+    // - If a contradiction is found, eliminate the constraint possibility, reduce cell possibilities, and return to 1
+    // - If a solution is found, that's it!
 
     val (row, column, value) = this.pickSomething
 
@@ -229,7 +169,6 @@ class GameState (
       return this.definitelyNotThis(row, column, value).solve
     }
   }
-
 
   def printConstraints() {
     for ((constraintChar, constraint) <- this.constraints) {
