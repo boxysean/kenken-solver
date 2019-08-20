@@ -1,6 +1,6 @@
 import org.scalatest.FunSuite
 
-import main.Util
+import com.solvemykenken.solver.Util
 
 class UtilTest extends FunSuite {
   test("Util.factorize") {

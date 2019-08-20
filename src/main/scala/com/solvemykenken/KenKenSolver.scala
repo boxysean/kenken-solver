@@ -1,11 +1,11 @@
-package main
+package com.solvemykenken
 
 import scala.io.Source
 import scala.language.reflectiveCalls
 import scala.collection.mutable.HashMap
 import scala.util.matching.Regex
 
-import main._
+import com.solvemykenken.solver._
 
 
 object Control {
@@ -42,7 +42,7 @@ object KenKenSolver {
   }
 
   def main(args: Array[String]): Unit = {
-    var gameState = this.parseFile("kenken-20190728-7x7.in")
+    var gameState = this.parseFile("kenken-20190817-7x7.in")
     gameState.printConstraints
     println()
     gameState.printBoard

@@ -1,4 +1,4 @@
-package main
+package com.solvemykenken.solver
 
 object Operator extends Enumeration {
   type Operator = Value

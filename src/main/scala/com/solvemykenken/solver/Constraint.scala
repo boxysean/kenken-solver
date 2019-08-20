@@ -1,4 +1,4 @@
-package main
+package com.solvemykenken.solver
 
 import scala.io.Source
 import scala.language.reflectiveCalls
@@ -6,8 +6,8 @@ import scala.collection.mutable.HashMap
 import scala.util.matching.Regex
 import scala.util.control.Breaks._
 
-import main.Operator._
-import main.Util
+import com.solvemykenken.solver.Operator._
+import com.solvemykenken.solver.Util
 
 
 class Constraint (

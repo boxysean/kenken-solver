@@ -1,10 +1,25 @@
-name := "KenKenSolver"
+import sbt.Keys._
+import sbt._
+import sbtrelease.Version
+
+name := "solvemykenken"
 
 version := "1.0"
 
+resolvers += Resolver.sonatypeRepo("public")
 scalaVersion := "2.13.0"
+releaseNextVersion := { ver => Version(ver).map(_.bumpMinor.string).getOrElse("Error") }
+assemblyJarName in assembly := "solvemykenken.jar"
 
-libraryDependencies += "org.scalactic" %% "scalactic" % "3.0.8"
-libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.8" % "test"
+libraryDependencies ++= Seq(
+  "com.amazonaws" % "aws-lambda-java-events" % "2.2.1",
+  "com.amazonaws" % "aws-lambda-java-core" % "1.2.0",
+  "org.scalactic" %% "scalactic" % "3.0.8",
+  "org.scalatest" %% "scalatest" % "3.0.8" % "test"
+)
 
-resolvers += "Artima Maven Repository" at "http://repo.artima.com/releases"
+scalacOptions ++= Seq(
+  "-unchecked",
+  "-deprecation",
+  "-feature",
+  "-Xfatal-warnings")

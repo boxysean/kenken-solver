@@ -2,9 +2,9 @@ import scala.collection.mutable.HashMap
 
 import org.scalatest.FunSuite
 
-import main.Operator
-import main.Constraint
-import main.GameState
+import com.solvemykenken.solver.Operator
+import com.solvemykenken.solver.Constraint
+import com.solvemykenken.solver.GameState
 
 class GameConstraintStateTest extends FunSuite {
   test("GameConstraintState.placementIsLegal") {

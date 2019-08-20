@@ -1,4 +1,4 @@
-package main
+package com.solvemykenken.solver
 
 import scala.io.Source
 import scala.language.reflectiveCalls
@@ -6,8 +6,8 @@ import scala.collection.mutable.ArrayBuffer
 import scala.collection.mutable.HashMap
 import scala.util.matching.Regex
 
-import main.Operator
-import main.Constraint
+import com.solvemykenken.solver.Operator
+import com.solvemykenken.solver.Constraint
 
 
 class GameState (
@@ -170,13 +170,13 @@ class GameState (
     }
   }
 
-  def printConstraints() {
+  def printConstraints(): Unit = {
     for ((constraintChar, constraint) <- this.constraints) {
       println("" + constraintChar + "->" + constraint)
     }
   }
 
-  def printBoard() {
+  def printBoard(): Unit = {
     for (row <- board) {
       for (cell <- row) {
         print(cell)
@@ -186,7 +186,7 @@ class GameState (
     }
   }
 
-  def printPlacements() {
+  def printPlacements(): Unit = {
     println(this.toString)
   }
 
@@ -196,7 +196,7 @@ class GameState (
       case _ => " "
     }).mkString("")
 
-  def printPossibilities() {
+  def printPossibilities(): Unit = {
     for (row <- 0 to board.length-1) {
       for (column <- 0 to board.length-1) {
         print(this.cellPossibilityToString(cellPossibilities(row)(column)))
