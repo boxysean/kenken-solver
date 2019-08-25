@@ -1,16 +1,24 @@
-.PHONY: run test deploy testapi
+.PHONY: run test unittest integrationtest deploy install
+
+SCALA_FILES = $(shell find src -name '*.scala')
 
 run:
 	sbt run
 
-test:
+test: unittest integrationtest
+
+unittest:
 	sbt test
 
-target/scala-2.13/solvemykenken.jar:
+integrationtest:
+	serverless test
+
+install: build.sbt
+	sbt reload
+	sbt update
+
+target/scala-2.13/solvemykenken.jar: $(SCALA_FILES)
 	sbt assembly
 
 deploy: target/scala-2.13/solvemykenken.jar
 	serverless deploy
-
-test-serverless:
-	serverless invoke local -f solve

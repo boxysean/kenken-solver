@@ -39,7 +39,7 @@ package:
 
 functions:
   solve:
-    handler: com.solvemykenken.aws.Handler
+    handler: com.solvemykenken.aws.ApiGatewayHandler
     events:
     - http:
         path: solve

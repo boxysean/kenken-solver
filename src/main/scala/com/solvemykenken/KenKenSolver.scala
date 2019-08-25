@@ -23,7 +23,7 @@ object KenKenSolver {
 
     constraintLine.split(" ").map(token => token match {
       case constraintBlobPattern(name, value, operator) => new Constraint(name(0), value.toInt, Operator.withName(operator))
-      case _ => throw new Exception("Parse error")
+      case _ => throw new KenKenSolverException("Error parsing token " + token)
     }).toList
   }
 
@@ -40,6 +40,11 @@ object KenKenSolver {
       return GameState(parseConstraintLine(lines.next), parseBoard(lines))
     }
   }
+
+  def solveFromAPI(boardStrings: Iterator[String], constraintString: String): Array[Array[Char]]   =
+    GameState(parseConstraintLine(constraintString), parseBoard(boardStrings))
+      .solve
+      .board
 
   def main(args: Array[String]): Unit = {
     var gameState = this.parseFile("kenken-20190817-7x7.in")
