@@ -3,7 +3,6 @@ package com.solvemykenken.aws
 import scala.jdk.CollectionConverters._
 import scala.beans.BeanProperty
 import scala.collection.immutable.Map
-
 import java.util
 
 import com.amazonaws.services.lambda.runtime.{Context, RequestHandler}
@@ -11,13 +10,6 @@ import spray.json._
 import spray.json.DefaultJsonProtocol._
 
 import com.solvemykenken.KenKenSolver
-
-class SolveRequest(
-  @BeanProperty var constraintString: String,
-  @BeanProperty var boardStrings: Array[String],
-) {
-  def this() = this("", Array())
-}
 
 case class ApiGatewayResponse(
   @BeanProperty statusCode: Integer,
