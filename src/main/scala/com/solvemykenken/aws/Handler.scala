@@ -28,11 +28,6 @@ case class ApiGatewayResponse(
 
 class ApiGatewayHandler extends RequestHandler[util.Map[String, Any], ApiGatewayResponse] {
   def handleRequest(input: util.Map[String, Any], context: Context): ApiGatewayResponse = {
-    // This ain't doing what I expect!
-    println("BODY")
-    println(input)
-    println(input.get("body"))
-    println(input.get("body").getClass)
     val bodyJson = input.get("body").asInstanceOf[String].parseJson
 
     var boardStrings = bodyJson.asJsObject.getFields("boardStrings") match {
@@ -45,20 +40,16 @@ class ApiGatewayHandler extends RequestHandler[util.Map[String, Any], ApiGateway
       case _ => throw new Exception("parser error")
     }
 
-    // var boardStrings = body.get("boardStrings").asInstanceOf[Array[String]]
-    // var constraintString = body.get("constraintString").asInstanceOf[String]
-
     try {
       var board = KenKenSolver.solveFromAPI(boardStrings.iterator, constraintString)
       var boardOutput = board.map(row => row.mkString(""))
 
-    // val headers = Map[String, Object]("x-custom-response-header" -> "my custom response header value").asJava
       ApiGatewayResponse(
         200,
         Map(
           "constraintString" -> constraintString,
           "boardInput" -> boardStrings.mkString("\n"),
-          "boardOutput" -> boardOutput.mkString("\n")
+          "boardOutput" -> boardOutput.mkString("\n"),
         ).toJson.toString,
         null,
         true
@@ -69,6 +60,7 @@ class ApiGatewayHandler extends RequestHandler[util.Map[String, Any], ApiGateway
           500,
           Map(
             "error" -> e.toString,
+            "constraintString" -> constraintString,
             "boardInput" -> boardStrings.mkString("\n"),
           ).toJson.toString,
           null,
