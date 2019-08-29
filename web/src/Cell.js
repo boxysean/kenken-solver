@@ -1,13 +1,17 @@
 import React from 'react';
-
-import classNames from 'classnames/bind';
-
 import styles from './Cell.css';
+import classNames from 'classnames/bind';
 
 let cx = classNames.bind(styles);
 
 
 class Cell extends React.Component {
+  setConstraint(value, operator) {
+    this.setState({
+      constraint: value + operator,
+    })
+  }
+
   render() {
     let className = cx({
       Cell: true,
@@ -19,7 +23,7 @@ class Cell extends React.Component {
         onMouseMove={(event) => this.props.processHover(this.props.cellIndex)}
         onMouseDown={(event) => this.props.processBegin(this.props.cellIndex)}
       >
-        {this.props.cellIndex}
+        {this.props.constraint}
       </div>
     );
   }

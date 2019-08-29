@@ -4,17 +4,6 @@ import Cell from './Cell';
 import './Board.css';
 
 class Board extends React.Component {
-  onMouseDown(event) {
-    console.log("DOWN");
-    console.log(event);
-  }
-
-  onMouseUp(event) {
-    console.log("UP");
-    console.log(event);
-    this.props.onRelease(event);
-  }
-
   getCells(selectedCells) {
     var cells = [];
 
@@ -23,10 +12,10 @@ class Board extends React.Component {
         var cellIndex = i * this.props.size + j;
         const element = <Cell
           cellIndex={cellIndex}
-          processRelease={(event) => this.props.processRelease(event)}
-          processBegin={(event) => this.props.processBegin(event)}
-          processHover={(event) => this.props.processHover(event)}
+          processBegin={this.props.processBegin}
+          processHover={this.props.processHover}
           isSelected={selectedCells.has(cellIndex)}
+          constraint={this.props.constraints[cellIndex]}
         ></Cell>;
         cells.push(element);
       }
@@ -36,6 +25,9 @@ class Board extends React.Component {
   }
 
   render() {
+    console.log("CONSTRAINTS");
+    console.log(this.props.constraints);
+
     var gridColumnTemplateStyle = {
       'grid-template-columns': `repeat(${this.props.size}, 40px)`
     };
@@ -44,8 +36,6 @@ class Board extends React.Component {
       <div
         className="Board"
         style={gridColumnTemplateStyle}
-        // onMouseDown={(event) => this.onMouseDown(event)}
-        // onMouseUp={(event) => this.onMouseUp(event)}
       >
         {this.getCells(this.props.selectedCells).map(cell => cell)}
       </div>
