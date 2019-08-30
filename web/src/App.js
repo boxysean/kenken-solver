@@ -1,7 +1,9 @@
 import React from 'react';
 import './App.css';
-import Board from './Board';
-import Modal from './Modal';
+
+import Board from './components/Board';
+import Modal from './components/Modal';
+import SubmitButton from './components/SubmitButton';
 
 import update from 'immutability-helper';
 
@@ -10,88 +12,93 @@ class App extends React.Component {
     super(props);
 
     this.state = {
+      modal: false,
       selected: new Set(),
       selecting: false,
       constraints: {},
+      answers: [],
     };
   }
 
-  popUp(selected) {
-    this.setState({
-      modal: true,
-    })
-  }
-
-  processRelease(cellIndex) {
-    console.log("PROCESS RELEASE", this.state.modal, this.state.selecting, this.state.selected);
-    if (this.state.modal) {
-      console.log("SELECTING MODAL");
-    } else if (this.state.selecting) {
-      console.log("SELECTING RELEASE");
-      this.popUp(this.state.selected);
-      //
-      // this.setState({
-      //   selected: new Set(),
-      //   selecting: false,
-      // });
-    }
-  }
-
-  processHover(cellIndex) {
-    console.log("PROCESS HOVER", this.state.selected);
-    if (this.state.selecting) {
-      this.setState({
-        selected: this.state.selected.add(cellIndex)
-      });
-    }
-  }
-
   processBegin(cellIndex) {
-    console.log("PROCESS BEGIN", this.state.selected);
     this.setState({
       selected: new Set([cellIndex]),
       selecting: true,
     });
   }
 
-  processModal(value, operator) {
-    console.log("PROCESS MODAL", value, operator, this.state.selected);
+  processHover(cellIndex) {
+    if (this.state.selecting) {
+      this.setState({
+        selected: this.state.selected.add(cellIndex),
+      });
+    }
+  }
 
+  processRelease(cellIndex) {
+    if (!this.state.modal && this.state.selecting) {
+      this.setState({
+        modal: true,
+      });
+    }
+  }
+
+  resetModal() {
+    this.setState({
+      modal: false,
+      selected: new Set(),
+      selecting: false,
+    });
+  }
+
+  processModal(value, operator) {
     var result = Array.from(this.state.selected).reduce(function(obj, x) {
       obj[x] = {$set: value + operator};
       return obj;
     }, {});
 
-    console.log("RESULT");
-    console.log(result);
-
     this.setState({
-      modal: false,
-      selected: new Set(),
-      selecting: false,
       constraints: update(this.state.constraints, result),
     });
+
+    this.resetModal();
   }
 
-  closeModal(event) {
-    this.setState({
-      modal: false,
-      selected: new Set(),
-      selecting: false,
-    });
+  submit() {
+    fetch("/solve", {
+      method: "post",
+      body: JSON.stringify({
+        constraintString: "a=3+ b=6+ c=5+ d=4+",
+        boardStrings: [
+          "a a b",
+          "c d b",
+          "c d b"
+        ],
+      })
+    })
+      .then(res => res.json())
+      .then((data) => {
+        console.log(data.boardOutput);
+        this.setState({
+          answers: data.boardOutput.split(/\s/)
+        });
+      })
+      .catch(console.log);
   }
 
   render() {
     return (
       <div className="App" onMouseUp={(event) => this.processRelease(event)}>
-        {this.state.modal && <Modal processModal={this.processModal.bind(this)} closeModal={this.closeModal.bind(this)}></Modal>}
+        {this.state.modal && <Modal processModal={this.processModal.bind(this)} closeModal={this.resetModal.bind(this)}></Modal>}
         <Board
-          size="5"
+          size="3"
           processHover={this.processHover.bind(this)}
           processBegin={this.processBegin.bind(this)}
           selectedCells={this.state.selected}
           constraints={this.state.constraints}
+          answers={this.state.answers}
         ></Board>
+        <SubmitButton onSubmit={this.submit.bind(this)}></SubmitButton>
       </div>
     );
   }

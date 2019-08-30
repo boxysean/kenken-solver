@@ -23,7 +23,7 @@ class Cell extends React.Component {
         onMouseMove={(event) => this.props.processHover(this.props.cellIndex)}
         onMouseDown={(event) => this.props.processBegin(this.props.cellIndex)}
       >
-        {this.props.constraint}
+        {this.props.answer || this.props.constraint}
       </div>
     );
   }

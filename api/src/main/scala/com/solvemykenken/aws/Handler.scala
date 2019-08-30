@@ -34,14 +34,13 @@ class ApiGatewayHandler extends RequestHandler[util.Map[String, Any], ApiGateway
 
     try {
       var board = KenKenSolver.solveFromAPI(boardStrings.iterator, constraintString)
-      var boardOutput = board.map(row => row.mkString(""))
 
       ApiGatewayResponse(
         200,
         Map(
           "constraintString" -> constraintString,
           "boardInput" -> boardStrings.mkString("\n"),
-          "boardOutput" -> boardOutput.mkString("\n"),
+          "boardOutput" -> board,
         ).toJson.toString,
         null,
         true

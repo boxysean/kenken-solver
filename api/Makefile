@@ -1,17 +1,12 @@
-.PHONY: run test unittest integrationtest deploy install
+.PHONY: run test install
 
 SCALA_FILES = $(shell find src -name '*.scala')
 
 run:
 	sbt run
 
-test: unittest integrationtest
-
-unittest:
+test:
 	sbt test
-
-integrationtest:
-	serverless test
 
 install: build.sbt
 	sbt reload

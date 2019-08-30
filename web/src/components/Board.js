@@ -16,6 +16,7 @@ class Board extends React.Component {
           processHover={this.props.processHover}
           isSelected={selectedCells.has(cellIndex)}
           constraint={this.props.constraints[cellIndex]}
+          answer={this.props.answers[cellIndex]}
         ></Cell>;
         cells.push(element);
       }
@@ -25,9 +26,6 @@ class Board extends React.Component {
   }
 
   render() {
-    console.log("CONSTRAINTS");
-    console.log(this.props.constraints);
-
     var gridColumnTemplateStyle = {
       'grid-template-columns': `repeat(${this.props.size}, 40px)`
     };

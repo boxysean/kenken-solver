@@ -41,10 +41,10 @@ object KenKenSolver {
     }
   }
 
-  def solveFromAPI(boardStrings: Iterator[String], constraintString: String): Array[Array[Char]]   =
+  def solveFromAPI(boardStrings: Iterator[String], constraintString: String): String =
     GameState(parseConstraintLine(constraintString), parseBoard(boardStrings))
       .solve
-      .board
+      .toJson
 
   def main(args: Array[String]): Unit = {
     var gameState = this.parseFile("kenken-20190817-7x7.in")
