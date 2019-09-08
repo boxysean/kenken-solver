@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - 'web/*'
+      - .github/workflows/web.yaml
 
 jobs:
   test:
@@ -21,4 +22,6 @@ jobs:
 
     - name: Test
       working-directory: web
+      env:
+        CI: true
       run: make test
