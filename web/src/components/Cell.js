@@ -16,6 +16,10 @@ class Cell extends React.Component {
     let className = cx({
       Cell: true,
       isSelected: this.props.isSelected,
+      borderLeft: this.props.borders.left,
+      borderRight: this.props.borders.right,
+      borderTop: this.props.borders.top,
+      borderBottom: this.props.borders.bottom,
     });
 
     return (
@@ -23,7 +27,7 @@ class Cell extends React.Component {
         onMouseMove={(event) => this.props.processHover(this.props.cellIndex)}
         onMouseDown={(event) => this.props.processBegin(this.props.cellIndex)}
       >
-        {this.props.answer || this.props.constraint}
+        {this.props.display}
       </div>
     );
   }

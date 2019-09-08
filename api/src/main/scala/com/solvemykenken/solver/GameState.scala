@@ -213,6 +213,14 @@ class GameState (
         case _ => "."
       }).mkString(" ")
     ).mkString("\n")
+
+  def toJson(): Array[Array[String]] =
+    this.cellPossibilities.map(row =>
+      row.map(possibilities => possibilities.toList match {
+        case List(x) => x.toString
+        case _ => "."
+      })
+    )
 }
 
 object GameState {

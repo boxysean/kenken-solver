@@ -1,7 +1,7 @@
 .Cell {
   height: 40px;
   width: 40px;
-  border: 1px #000000 solid;
+  border: 1px #cccccc solid;
   background-color: #ffffff;
   color: #000000;
 
@@ -15,4 +15,20 @@
 
 .isSelected {
   background-color: yellow;
+}
+
+.borderLeft {
+  border-left: 1px #000000 solid !important;
+}
+
+.borderRight {
+  border-right: 1px #000000 solid !important;
+}
+
+.borderTop {
+  border-top: 1px #000000 solid !important;
+}
+
+.borderBottom {
+  border-bottom: 1px #000000 solid !important;
 }
