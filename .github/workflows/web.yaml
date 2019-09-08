@@ -17,6 +17,7 @@ jobs:
         node-version: 12.x
 
     - name: npm install, build, and test
+      working-directory: web
       run: |
         npm install
         npm run build
