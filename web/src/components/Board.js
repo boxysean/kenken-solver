@@ -52,7 +52,7 @@ class Board extends React.Component {
 
   render() {
     var gridColumnTemplateStyle = {
-      'grid-template-columns': `repeat(${this.props.size}, 40px)`
+      'gridTemplateColumns': `repeat(${this.props.size}, 60px)`
     };
 
     return (
