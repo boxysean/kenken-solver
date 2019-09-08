@@ -1,5 +1,8 @@
 name: Web
-on: [push]
+on:
+  push:
+    paths:
+      - 'web/*'
 
 jobs:
   test:
@@ -16,11 +19,6 @@ jobs:
       with:
         node-version: 12.x
 
-    - name: npm install, build, and test
+    - name: Test
       working-directory: web
-      env:
-        CI: true
-      run: |
-        npm install
-        npm run build
-        npm test
+      run: make test
