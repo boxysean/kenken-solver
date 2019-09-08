@@ -1,4 +1,4 @@
-.PHONY: run test install
+.PHONY: run test install serverless
 
 SCALA_FILES = $(shell find src -name '*.scala')
 
@@ -13,7 +13,10 @@ install: build.sbt
 	sbt update
 
 target/scala-2.13/solvemykenken.jar: $(SCALA_FILES)
-	sbt assembly 
+	sbt assembly
 
-deploy: target/scala-2.13/solvemykenken.jar
+serverless:
+	which serverless || npm install -g serverless
+
+deploy: target/scala-2.13/solvemykenken.jar serverless
 	serverless deploy
