@@ -13,7 +13,7 @@ install: build.sbt
 	sbt update
 
 target/scala-2.13/solvemykenken.jar: $(SCALA_FILES)
-	sbt assembly
+	sbt assembly 
 
 deploy: target/scala-2.13/solvemykenken.jar
 	serverless deploy
