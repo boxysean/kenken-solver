@@ -18,6 +18,8 @@ jobs:
 
     - name: npm install, build, and test
       working-directory: web
+      env:
+        CI: true
       run: |
         npm install
         npm run build
