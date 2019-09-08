@@ -7,7 +7,6 @@ version := "1.0"
 
 resolvers += Resolver.sonatypeRepo("public")
 scalaVersion := "2.13.0"
-assemblyJarName in assembly := "solvemykenken.jar"
 
 libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-lambda-java-events" % "2.2.1",
