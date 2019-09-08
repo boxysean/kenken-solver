@@ -21,7 +21,7 @@ jobs:
 
     - name: Test
       working-directory: api
-      run: make test
+      run: make api-test
 
   deploy:
     name: Deploy API
@@ -44,4 +44,4 @@ jobs:
 
     - name: Deploy
       working-directory: api
-      run: make deploy
+      run: make api-deploy

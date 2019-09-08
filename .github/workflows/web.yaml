@@ -24,4 +24,4 @@ jobs:
       working-directory: web
       env:
         CI: true
-      run: make test
+      run: make web-test
