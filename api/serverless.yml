@@ -2,11 +2,12 @@ org: boxysean
 app: solvemykenken-app
 service: solvemykenken
 
-frameworkVersion: "=1.50.0"
+frameworkVersion: ">=1.50.0"
 
 provider:
   name: aws
   runtime: java8
+  cfnRole: arn:aws:iam::858316752957:user/github_actions
 
 stage: dev
 region: us-east-1
@@ -79,13 +80,13 @@ functions:
 #      variable2: value2
 
 # you can add CloudFormation resource templates here
-resources:
-  Resources:
-    website:
-      Type: AWS::S3::Bucket
-      Properties:
-        BucketName: kenken-solver-website
-  Outputs:
-    NewOutput:
-      Description: "Description for the output"
-      Value: "Some output value"
+# resources:
+#   Resources:
+#     website:
+#       Type: AWS::S3::Bucket
+#       Properties:
+#         BucketName: kenken-solver-website
+#   Outputs:
+#     NewOutput:
+#       Description: "Description for the output"
+#       Value: "Some output value"
