@@ -16,5 +16,5 @@ install-serverless:
 	which serverless || npm install -g serverless
 
 .PHONY: deploy
-deploy: target/scala-2.13/solvemykenken.jar api-install-serverless
+deploy: target/scala-2.13/solvemykenken.jar install-serverless
 	serverless deploy
