@@ -44,4 +44,7 @@ jobs:
 
     - name: Deploy
       working-directory: api
+      env:
+        AWS_ACCESS_KEY_ID: AKIA4PV5KJA6T26A6M5U
+        AWS_SECRET_ACCESS_KEY: AWS_SECRET_KEY_GITHUB_ACTIONS
       run: make deploy
