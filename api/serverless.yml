@@ -35,7 +35,7 @@ region: us-east-1
 # Make sure to run "sbt assembly" to create a jar file
 # with all your dependencies and put that jar file name here.
 package:
-  artifact: target/scala-2.13/solvemykenken.jar
+  artifact: target/scala-2.13/solvemykenken-assembly-1.0.jar
 
 functions:
   solve:
