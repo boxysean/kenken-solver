@@ -1,5 +1,4 @@
 org: boxysean
-app: solvemykenken-app
 service: solvemykenken
 
 frameworkVersion: ">=1.50.0"
