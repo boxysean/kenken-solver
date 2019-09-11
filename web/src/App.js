@@ -3,6 +3,7 @@ import _ from 'lodash';
 import './App.css';
 
 import Board from './components/Board';
+import BoardSlider from './components/BoardSlider';
 import Modal from './components/Modal';
 import SubmitButton from './components/SubmitButton';
 
@@ -13,14 +14,25 @@ class App extends React.Component {
     super(props);
 
     this.state = {
+      boardSize: 3,
       modal: false,
       selected: new Set(),
       selecting: false,
       cellToConstraint: {},
       constraintCharToFormula: {},
       answers: [],
-      boardSize: 3
     };
+  }
+
+  reset() {
+    this.setState({
+      modal: false,
+      selected: new Set(),
+      selecting: false,
+      cellToConstraint: {},
+      constraintCharToFormula: {},
+      answers: [],
+    });
   }
 
   processBegin(cellIndex) {
@@ -119,6 +131,14 @@ class App extends React.Component {
       .catch(console.log);
   }
 
+  changeBoardSize(size) {
+    this.setState({
+      boardSize: size,
+    });
+
+    this.reset();
+  }
+
   render() {
     return (
       <div className="App" onMouseUp={(event) => this.processRelease(event)}>
@@ -131,6 +151,10 @@ class App extends React.Component {
           constraints={this.state.cellToConstraint}
           answers={this.state.answers}
         ></Board>
+        <BoardSlider
+          boardSize={this.state.boardSize}
+          onChange={this.changeBoardSize.bind(this)}
+        ></BoardSlider>
         <SubmitButton onSubmit={this.submit.bind(this)}></SubmitButton>
       </div>
     );
