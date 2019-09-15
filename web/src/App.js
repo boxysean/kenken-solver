@@ -114,7 +114,7 @@ class App extends React.Component {
     console.log(constraintString);
     console.log(boardStrings);
 
-    fetch("/solve", {
+    fetch("api.kenken.gg/solve", {
       method: "post",
       body: JSON.stringify({
         constraintString: constraintString,

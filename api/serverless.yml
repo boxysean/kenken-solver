@@ -1,39 +1,19 @@
 org: boxysean
-service: solvemykenken
+service: kenken-gg-api
 
 frameworkVersion: ">=1.50.0"
 
 provider:
   name: aws
   runtime: java8
-  cfnRole: arn:aws:iam::858316752957:role/serverless-deployment
+  cfnRole: "arn:aws:iam::858316752957:role/serverless-deployment"
 
-stage: dev
+stage: prod
 region: us-east-1
 
-# you can add statements to the Lambda function's IAM Role here
-#  iamRoleStatements:
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:ListBucket"
-#      Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:PutObject"
-#      Resource:
-#        Fn::Join:
-#          - ""
-#          - - "arn:aws:s3:::"
-#            - "Ref" : "ServerlessDeploymentBucket"
-#            - "/*"
+# plugins:
+#   - serverless-domain-manager
 
-# you can define service wide environment variables here
-#  environment:
-#    variable1: value1
-
-# you can add packaging information here
-# Make sure to run "sbt assembly" to create a jar file
-# with all your dependencies and put that jar file name here.
 package:
   artifact: target/scala-2.13/solvemykenken-assembly-1.0.jar
 
@@ -78,13 +58,28 @@ functions:
 #    environment:
 #      variable2: value2
 
-# you can add CloudFormation resource templates here
+custom:
+  customDomain:
+    domainName: api.kenken.gg
+    stage: ci
+    certificateArn: arn:aws:acm:us-east-1:858316752957:certificate/f90395ab-7430-4eb1-a847-3cc312bfd23d
+    createRoute53Record: true
+    hostedZoneId: Z2E3YTMST0TS6T
+
+# # you can add CloudFormation resource templates here
 # resources:
 #   Resources:
-#     website:
-#       Type: AWS::S3::Bucket
+#     ApiDns:
+#       Type: AWS::Route53::RecordSetGroup
 #       Properties:
-#         BucketName: kenken-solver-website
+#         HostedZoneName: kenken.gg
+#         RecordSets:
+#         - Name: api.kenken.gg
+#           Type: A
+#           AliasTarget:
+#             HostedZoneId: !Join ['ID:', [!Ref 'HostedZoneId']]
+#             # DNSName: !GetAtt [WebsiteCloudFront, DomainName]
+#             DNSName: "myfakedomain.kenken.gg"
 #   Outputs:
 #     NewOutput:
 #       Description: "Description for the output"

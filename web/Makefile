@@ -1,16 +1,14 @@
-CFN_STACK_NAME=kenken-gg-website
+CFN_STACK_NAME=kenken-gg-web
+WEBSITE_URL=kenken.gg
+CFN_PARAMETERS_FILE=kenken-gg-cfn-params.json
 
 .PHONY: deploy-cloudformation-stack
-deploy-cloudformation-stack: cfn-template.yml
-	aws cloudformation deploy \
-	  --stack-name $(CFN_STACK_NAME) \
-		--template-file cfn-template.yml
-	aws cloudformation wait stack-create-complete --stack-name $(CFN_STACK_NAME)
-	aws cloudformation wait stack-update-complete --stack-name $(CFN_STACK_NAME)
+deploy-cloudformation-stack: cfn-template.yml $(CFN_PARAMETERS_FILE)
+	./deploy-cloudformation-stack.sh $(CFN_STACK_NAME) $(CFN_PARAMETERS_FILE)
 
 .PHONY: deploy-web
-deploy-web:
-	aws s3 sync build/ s3://kenken.gg/
+deploy-web: build
+	aws s3 sync build/ s3://$(WEBSITE_URL)/  # todo: make this get the bucket from CFN
 
 .PHONY: build
 build:
@@ -22,11 +20,14 @@ deploy: build deploy-cloudformation-stack deploy-web
 .PHONY: undeploy
 undeploy:
 	aws cloudformation delete-stack --stack-name $(CFN_STACK_NAME)
-	aws s3 rb --force s3://kenken.gg
 
 .PHONY: install
 install: package.json
 	npm install
+
+.PHONY: develop
+develop:
+	npm run start
 
 .PHONY: test
 test: install
