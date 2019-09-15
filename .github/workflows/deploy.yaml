@@ -1,32 +1,38 @@
-name: Web
+name: Deploy
 on:
   push:
-    paths:
-      - 'web/*'
-      - .github/workflows/web.yaml
+    branches:
+      - master
 
 jobs:
-  test:
-
-    name: Test Web
+  deploy-api:
+    name: Deploy API
     runs-on: ubuntu-latest
+    needs: test
 
     steps:
     - name: Checkout
       uses: actions/checkout@v1
+
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
 
     - name: Use Node.js 12.x
       uses: actions/setup-node@v1
       with:
         node-version: 12.x
 
-    - name: Test
-      working-directory: web
+    - name: Deploy
+      working-directory: api
       env:
-        CI: true
-      run: make test
+        AWS_DEFAULT_REGION: us-east-1
+        AWS_ACCESS_KEY_ID: AKIA4PV5KJA6T26A6M5U
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY_GITHUB_ACTIONS }}
+      run: make deploy
 
-  deploy:
+  deploy-web:
     name: Deploy Web
     runs-on: ubuntu-latest
 
@@ -43,6 +49,7 @@ jobs:
       working-directory: web
       env:
         CI: true
+        AWS_DEFAULT_REGION: us-east-1
         AWS_ACCESS_KEY_ID: AKIA4PV5KJA6T26A6M5U
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY_GITHUB_ACTIONS }}
       run: make deploy
