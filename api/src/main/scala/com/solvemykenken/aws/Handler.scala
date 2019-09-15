@@ -3,6 +3,7 @@ package com.solvemykenken.aws
 import scala.jdk.CollectionConverters._
 import scala.beans.BeanProperty
 import scala.collection.immutable.Map
+// import scala.collection.JavaConverters._
 import java.util
 
 import com.amazonaws.services.lambda.runtime.{Context, RequestHandler}
@@ -32,6 +33,11 @@ class ApiGatewayHandler extends RequestHandler[util.Map[String, Any], ApiGateway
       case _ => throw new Exception("parser error")
     }
 
+    var corsHeaders: java.util.Map[String, Object] = Map(
+      "Access-Control-Allow-Origin" -> "*".asInstanceOf[Object],
+      "Access-Control-Allow-Credentials" -> "true".asInstanceOf[Object],
+    ).asJava;
+
     try {
       var board = KenKenSolver.solveFromAPI(boardStrings.iterator, constraintString)
 
@@ -42,7 +48,7 @@ class ApiGatewayHandler extends RequestHandler[util.Map[String, Any], ApiGateway
           "boardInput" -> boardStrings.mkString("\n"),
           "boardOutput" -> board,
         ).toJson.toString,
-        null,
+        corsHeaders,
         true
       )
     } catch {
@@ -54,7 +60,7 @@ class ApiGatewayHandler extends RequestHandler[util.Map[String, Any], ApiGateway
             "constraintString" -> constraintString,
             "boardInput" -> boardStrings.mkString("\n"),
           ).toJson.toString,
-          null,
+          corsHeaders,
           true
         )
     }

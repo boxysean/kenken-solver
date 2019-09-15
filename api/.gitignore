@@ -16,3 +16,5 @@ project/plugins/project/
 
 # Serverless directories
 .serverless
+
+node_modules

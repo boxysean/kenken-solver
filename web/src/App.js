@@ -1,4 +1,5 @@
 import React from 'react';
+import {Helmet} from 'react-helmet';
 import _ from 'lodash';
 import './App.css';
 
@@ -114,7 +115,7 @@ class App extends React.Component {
     console.log(constraintString);
     console.log(boardStrings);
 
-    fetch("api.kenken.gg/solve", {
+    fetch("https://api.kenken.gg/solve", {
       method: "post",
       body: JSON.stringify({
         constraintString: constraintString,
@@ -125,10 +126,18 @@ class App extends React.Component {
       .then((data) => {
         console.log(data.boardOutput);
         this.setState({
-          answers: data.boardOutput.split(/\s/)
+          answers: data.boardOutput.split(/\s/),
+          resultMessage: "Success!",
+          resultColor: "#00ff00",
         });
       })
-      .catch(console.log);
+      .catch(error => {
+        this.setState({
+          resultMessage: "Fail solving! :-(",
+          resultColor: "#ff0000",
+        });
+        console.log(error);
+      });
   }
 
   changeBoardSize(size) {
@@ -142,6 +151,11 @@ class App extends React.Component {
   render() {
     return (
       <div className="App" onMouseUp={(event) => this.processRelease(event)}>
+        <Helmet>
+          <title>kenken.gg</title>
+        </Helmet>
+
+        <p>Welcome to kenken.gg, the best KenKen solver! This is in beta mode and only works on desktop. Click-and-drag your mouse to solve your KenKen!</p>
         {this.state.modal && <Modal processModal={this.processModal.bind(this)} closeModal={this.resetModal.bind(this)}></Modal>}
         <Board
           size={this.state.boardSize}
@@ -156,6 +170,7 @@ class App extends React.Component {
           onChange={this.changeBoardSize.bind(this)}
         ></BoardSlider>
         <SubmitButton onSubmit={this.submit.bind(this)}></SubmitButton>
+        <p style={{color: this.state.resultColor}}>{this.state.resultMessage}</p>
       </div>
     );
   }
