@@ -26,6 +26,8 @@ class Cell extends React.Component {
       <div className={className}
         onMouseMove={(event) => this.props.processHover(this.props.cellIndex)}
         onMouseDown={(event) => this.props.processBegin(this.props.cellIndex)}
+        onTouchStart={(event) => this.props.processBegin(this.props.cellIndex)}
+        id={"cell-" + this.props.cellIndex}
       >
         {this.props.display}
       </div>
