@@ -148,9 +148,22 @@ class App extends React.Component {
     this.reset();
   }
 
+  processTouchMove(event) {
+    // This handles touches. The onTouchMove handler is not called by the cells over which the pointer is on, only the cell it originated from.
+    const touch = event.targetTouches[0];
+    var cell = document.elementFromPoint(touch.clientX, touch.clientY);
+    var id = parseInt(cell.id.replace("cell-", ""));
+    this.processHover(id);
+  }
+
   render() {
     return (
-      <div className="App" onMouseUp={(event) => this.processRelease(event)}>
+      <div
+        className="App"
+        onMouseUp={(event) => this.processRelease(event)}
+        onTouchMove={(event) => this.processTouchMove(event)}
+        onTouchEnd={(event) => this.processRelease(event)}
+      >
         <Helmet>
           <title>kenken.gg</title>
         </Helmet>
