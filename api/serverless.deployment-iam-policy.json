@@ -50,7 +50,8 @@
         "s3:PutEncryptionConfiguration"
       ],
       "Resource": [
-        "arn:aws:s3:::*kenken*serverlessdeploy*"
+        "arn:aws:s3:::*kenken*serverlessdeploy*",
+        "arn:aws:s3:::kenken.gg"
       ]
     },
     {
@@ -61,7 +62,8 @@
         "s3:DeleteObject"
       ],
       "Resource": [
-        "arn:aws:s3:::*kenken*serverlessdeploy*"
+        "arn:aws:s3:::*kenken*serverlessdeploy*",
+        "arn:aws:s3:::kenken.gg*"
       ]
     },
     {
@@ -188,6 +190,15 @@
       ],
       "Resource": [
         "arn:aws:s3:::*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "cloudfront:CreateInvalidation"
+      ],
+      "Resource": [
+        "*"
       ]
     }
   ]
