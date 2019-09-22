@@ -11,7 +11,7 @@ deploy-web: build
 	aws s3 sync build/ s3://$(WEBSITE_BUCKET)/
 
 .PHONY: build
-build:
+build: install
 	npm run build
 
 .PHONY: invalidate-cloudfront-cache
