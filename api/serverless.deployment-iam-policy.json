@@ -17,6 +17,7 @@
       "Effect": "Allow",
       "Action": [
         "cloudformation:CreateStack",
+        "cloudformation:CreateChangeSet",
         "cloudformation:CreateUploadBucket",
         "cloudformation:DeleteStack",
         "cloudformation:Describe*",
