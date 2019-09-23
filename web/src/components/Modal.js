@@ -25,12 +25,16 @@ class Modal extends React.Component {
       <div className="Modal ModalOn">
         <div className="ModalContent">
           <span onClick={(event) => this.close(event)} className="Close">&times;</span>
-          <input autoFocus type="number" onChange={event => this.handleChange(event)}></input>
-          <button onClick={(event) => this.handleButton(event, "+")}>+</button>
-          <button onClick={(event) => this.handleButton(event, "-")}>-</button>
-          <button onClick={(event) => this.handleButton(event, "x")}>x</button>
-          <button onClick={(event) => this.handleButton(event, "/")}>/</button>
-          <button onClick={(event) => this.handleButton(event, "")}>&nbsp;</button>
+          <div>
+            <input autoFocus type="number" onChange={event => this.handleChange(event)}></input>
+          </div>
+          <div>
+            <button className="ModalButton" onClick={(event) => this.handleButton(event, "+")}>+</button>
+            <button className="ModalButton" onClick={(event) => this.handleButton(event, "-")}>-</button>
+            <button className="ModalButton" onClick={(event) => this.handleButton(event, "x")}>x</button>
+            <button className="ModalButton" onClick={(event) => this.handleButton(event, "/")}>/</button>
+            <button className="ModalButton" onClick={(event) => this.handleButton(event, "")}>&nbsp;</button>
+          </div>
         </div>
       </div>
     );
