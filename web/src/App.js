@@ -168,7 +168,7 @@ class App extends React.Component {
           <title>kenken.gg</title>
         </Helmet>
 
-        <p>Welcome to kenken.gg, the best KenKen solver! This is in beta mode and only works on desktop. Click-and-drag your mouse to solve your KenKen!</p>
+        <p>Welcome to kenken.gg, the best KenKen solver! This is in beta mode. Click/touch-and-drag your mouse to begin!</p>
         {this.state.modal && <Modal processModal={this.processModal.bind(this)} closeModal={this.resetModal.bind(this)}></Modal>}
         <Board
           size={this.state.boardSize}
