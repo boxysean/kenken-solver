@@ -40,7 +40,6 @@ class GameConstraintState(
       case (row, column) => gameState.cellPossibilities(row)(column).head
     }).sorted
     val r = this.possibleCombinations.contains(placement)
-    // println("" + this + " " + r + " " + this.possibleCombinations + " " + placement)
     return r
   }
 }

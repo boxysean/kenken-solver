@@ -6,6 +6,8 @@ import scala.collection.mutable.ArrayBuffer
 import scala.collection.mutable.HashMap
 import scala.util.matching.Regex
 
+import com.typesafe.scalalogging.LazyLogging
+
 import com.solvemykenken.solver.Operator
 import com.solvemykenken.solver.Constraint
 
@@ -15,7 +17,7 @@ class GameState (
   val board: Array[Array[Char]],
   val cellPossibilities: Array[Array[Set[Int]]],
   val placed: Array[Array[Boolean]]
-) {
+) extends LazyLogging {
 
   def boardSize: Int =
     this.board.length
@@ -48,7 +50,7 @@ class GameState (
     this.allCellsHaveAChoice && this.allPlacementsAreLegal
 
   def reduceCellPossibilities(): GameState = {
-    println("REDUCING ( ｀皿´)｡ﾐ/")
+    logger.debug("REDUCING ( ｀皿´)｡ﾐ/")
 
     val newGameState: GameState = this.clone
     var modified = false
@@ -118,28 +120,26 @@ class GameState (
 
   def tryIt(row: Int, column: Int, value: Int): GameState = {
     val newGameState: GameState = this.clone
-    println("PICKING ¯\\_( ͡° ͜ʖ ͡°)_/¯", row, column, value)
+    logger.debug("PICKING ¯\\_( ͡° ͜ʖ ͡°)_/¯ {} {} {}", row, column, value)
     newGameState.cellPossibilities(row)(column) = Set(value)
     return newGameState
   }
 
   def definitelyNotThis(row: Int, column: Int, value: Int): GameState = {
     val newGameState: GameState = this.clone
-    println("DEFINITELY NOT ヽ(｀Д´)ﾉ", row, column, value)
+    logger.debug("DEFINITELY NOT ヽ(｀Д´)ﾉ {} {} {}", row, column, value)
     newGameState.cellPossibilities(row)(column) = newGameState.cellPossibilities(row)(column).filterNot(_ == value)
     return newGameState
   }
 
   def solve(): GameState = {
-    println("Solve cycle \\_(-_-)_/")
+    logger.debug("Solve cycle \\_(-_-)_/")
 
-    println(this)
-    println()
-    this.printPossibilities
-    println()
+    logger.debug("{}", this)
+    logger.debug("{}", this.possibilitiesToString)
 
     if (!this.isPossible) {
-      println("NOT POSSIBLE (̿▀̿ ̿Ĺ̯̿̿▀̿ ̿)̄", this.allCellsHaveAChoice, this.allPlacementsAreLegal)
+      logger.debug("NOT POSSIBLE (̿▀̿ ̿Ĺ̯̿̿▀̿ ̿)̄ {} {}", this.allCellsHaveAChoice, this.allPlacementsAreLegal)
       return null
     }
 
@@ -170,24 +170,32 @@ class GameState (
     }
   }
 
-  def printConstraints(): Unit = {
+  def constraintsToString(): String = {
+    var stringBuilder = new StringBuilder
+
     for ((constraintChar, constraint) <- this.constraints) {
-      println("" + constraintChar + "->" + constraint)
+      stringBuilder ++= "" + constraintChar + "->" + constraint
     }
+
+    return stringBuilder.toString()
   }
 
-  def printBoard(): Unit = {
+  def boardToString(): String = {
+    var stringBuilder = new StringBuilder
+
     for (row <- board) {
       for (cell <- row) {
-        print(cell)
-        print(' ')
+        stringBuilder += cell
+        stringBuilder += ' '
       }
-      println()
+      stringBuilder += '\n'
     }
+
+    return stringBuilder.toString()
   }
 
-  def printPlacements(): Unit = {
-    println(this.toString)
+  def placementsToString(): String = {
+    return this.toString
   }
 
   def cellPossibilityToString(possibility: Set[Int]): String =
@@ -196,14 +204,18 @@ class GameState (
       case _ => " "
     }).mkString("")
 
-  def printPossibilities(): Unit = {
+  def possibilitiesToString(): String = {
+    val stringBuilder = new StringBuilder
+
     for (row <- 0 to board.length-1) {
       for (column <- 0 to board.length-1) {
-        print(this.cellPossibilityToString(cellPossibilities(row)(column)))
-        print("|")
+        stringBuilder ++= this.cellPossibilityToString(cellPossibilities(row)(column))
+        stringBuilder += '|'
       }
-      println()
+      stringBuilder += '\n'
     }
+
+    return stringBuilder.toString()
   }
 
   override def toString =
