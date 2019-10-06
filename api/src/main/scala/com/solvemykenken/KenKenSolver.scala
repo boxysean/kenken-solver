@@ -5,6 +5,8 @@ import scala.language.reflectiveCalls
 import scala.collection.mutable.HashMap
 import scala.util.matching.Regex
 
+import com.typesafe.scalalogging.LazyLogging
+
 import com.solvemykenken.solver._
 
 
@@ -17,7 +19,7 @@ object Control {
     }
 }
 
-object KenKenSolver {
+object KenKenSolver extends LazyLogging {
   def parseConstraintLine(constraintLine: String): List[Constraint] = {
     val constraintBlobPattern: Regex = "([^=]*)=([0-9]+)([\\+\\-x/\\.]?)".r
 
@@ -48,11 +50,10 @@ object KenKenSolver {
 
   def main(args: Array[String]): Unit = {
     var gameState = this.parseFile("input/kenken3.in")
-    gameState.printConstraints
-    println()
-    gameState.printBoard
+    logger.info("{}", gameState.constraintsToString)
+    logger.info("{}", gameState.boardToString)
     val theSolvedBoard = gameState.solve
-    println("SOLVED ಡ_ಡ")
-    println(theSolvedBoard)
+    logger.info("SOLVED ಡ_ಡ")
+    logger.info("{}", theSolvedBoard)
   }
 }
