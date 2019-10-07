@@ -2,9 +2,9 @@ import scala.collection.mutable.HashMap
 
 import org.scalatest.FunSuite
 
-import com.solvemykenken.solver.Operator
-import com.solvemykenken.solver.Constraint
-import com.solvemykenken.solver.GameState
+import gg.kenken.solver.Operator
+import gg.kenken.solver.Constraint
+import gg.kenken.solver.GameState
 
 class GameStateTest extends FunSuite {
   test("GameState.reduceCellPossibilities") {

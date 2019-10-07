@@ -1,4 +1,4 @@
-package com.solvemykenken
+package gg.kenken
 
 class KenKenSolverException(
   message: String = "",

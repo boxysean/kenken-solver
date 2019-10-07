@@ -1,4 +1,4 @@
-package com.solvemykenken
+package gg.kenken
 
 import scala.io.Source
 import scala.language.reflectiveCalls
@@ -7,7 +7,7 @@ import scala.util.matching.Regex
 
 import com.typesafe.scalalogging.LazyLogging
 
-import com.solvemykenken.solver._
+import gg.kenken.solver._
 
 
 object Control {

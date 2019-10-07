@@ -16,11 +16,11 @@ region: us-east-1
 #   - serverless-domain-manager
 
 package:
-  artifact: target/scala-2.13/solvemykenken-assembly-1.0.jar
+  artifact: target/scala-2.13/kenkengg-assembly-1.0.jar
 
 functions:
   solve:
-    handler: com.solvemykenken.aws.ApiGatewayHandler
+    handler: gg.kenken.aws.ApiGatewayHandler
     events:
     - http:
         path: solve

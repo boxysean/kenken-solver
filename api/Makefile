@@ -1,5 +1,5 @@
 SCALA_FILES=$(shell find src -name '*.scala')
-BIG_FAT_JAR="target/scala-2.13/solvemykenken-assembly-1.0.jar"
+BIG_FAT_JAR="target/scala-2.13/kenkengg-assembly-1.0.jar"
 
 .PHONY: run
 run:

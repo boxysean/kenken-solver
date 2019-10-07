@@ -1,13 +1,13 @@
-package com.solvemykenken.solver
+package gg.kenken.solver
 
 import scala.io.Source
 import scala.language.reflectiveCalls
 import scala.collection.mutable.HashMap
 import scala.util.matching.Regex
 
-import com.solvemykenken.solver.Operator._
-import com.solvemykenken.solver.Constraint
-import com.solvemykenken.solver.Util
+import gg.kenken.solver.Operator._
+import gg.kenken.solver.Constraint
+import gg.kenken.solver.Util
 
 
 class GameConstraintState(

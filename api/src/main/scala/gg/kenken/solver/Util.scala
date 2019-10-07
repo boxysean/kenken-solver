@@ -1,4 +1,4 @@
-package com.solvemykenken.solver
+package gg.kenken.solver
 
 import scala.collection.BitSet
 import scala.collection.mutable.Map
