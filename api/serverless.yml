@@ -22,7 +22,7 @@ functions:
     - http:
         path: solve
         method: post
-        # cors: true
+        cors: true
 
 custom:
   customDomain:
@@ -41,18 +41,6 @@ resources:
         AttributeDefinitions:
           - AttributeName: "SubmissionId"
             AttributeType: "S"
-          # - AttributeName: "SubmittedAt"
-          #   AttributeType: "S"
-          # - AttributeName: "SubmittedBy"
-          #   AttributeType: "S"
-          # - AttributeName: "BoardInput"
-          #   AttributeType: "S"
-          # - AttributeName: "ConstraintString"
-          #   AttributeType: "S"
-          # - AttributeName: "BoardOutput"
-          #   AttributeType: "S"
-          # - AttributeName: "Description"
-          #   AttributeType: "S"
         KeySchema:
           - AttributeName: "SubmissionId"
             KeyType: "HASH"
