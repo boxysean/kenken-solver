@@ -200,6 +200,17 @@
       "Resource": [
         "*"
       ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:DescribeTable",
+        "dynamodb:CreateTable",
+        "dynamodb:DeleteTable"
+      ],
+      "Resource": [
+        "arn:aws:dynamodb:*:*:table/*Kenken*"
+      ]
     }
   ]
 }

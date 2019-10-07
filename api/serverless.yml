@@ -12,9 +12,6 @@ provider:
 stage: prod
 region: us-east-1
 
-# plugins:
-#   - serverless-domain-manager
-
 package:
   artifact: target/scala-2.13/kenkengg-assembly-1.0.jar
 
@@ -25,40 +22,7 @@ functions:
     - http:
         path: solve
         method: post
-        cors: true
-
-#    The following are a few example events you can configure
-#    NOTE: Please make sure to change your handler code to work with those events
-#    Check the event documentation for details
-#    events:
-#      - http:
-#          path: users/create
-#          method: get
-#      - s3: ${env:BUCKET}
-#      - schedule: rate(10 minutes)
-#      - sns: greeter-topic
-#      - stream: arn:aws:dynamodb:region:XXXXXX:table/foo/stream/1970-01-01T00:00:00.000
-#      - alexaSkill: amzn1.ask.skill.xx-xx-xx-xx
-#      - alexaSmartHome: amzn1.ask.skill.xx-xx-xx-xx
-#      - iot:
-#          sql: "SELECT * FROM 'some_topic'"
-#      - cloudwatchEvent:
-#          event:
-#            source:
-#              - "aws.ec2"
-#            detail-type:
-#              - "EC2 Instance State-change Notification"
-#            detail:
-#              state:
-#                - pending
-#      - cloudwatchLog: '/aws/lambda/hello'
-#      - cognitoUserPool:
-#          pool: MyUserPool
-#          trigger: PreSignUp
-
-#    Define function environment variables here
-#    environment:
-#      variable2: value2
+        # cors: true
 
 custom:
   customDomain:
@@ -68,21 +32,28 @@ custom:
     createRoute53Record: true
     hostedZoneId: Z2E3YTMST0TS6T
 
-# # you can add CloudFormation resource templates here
-# resources:
-#   Resources:
-#     ApiDns:
-#       Type: AWS::Route53::RecordSetGroup
-#       Properties:
-#         HostedZoneName: kenken.gg
-#         RecordSets:
-#         - Name: api.kenken.gg
-#           Type: A
-#           AliasTarget:
-#             HostedZoneId: !Join ['ID:', [!Ref 'HostedZoneId']]
-#             # DNSName: !GetAtt [WebsiteCloudFront, DomainName]
-#             DNSName: "myfakedomain.kenken.gg"
-#   Outputs:
-#     NewOutput:
-#       Description: "Description for the output"
-#       Value: "Some output value"
+resources:
+  Resources:
+    KenKenSubmissionsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: KenkenSubmissions
+        AttributeDefinitions:
+          - AttributeName: "SubmissionId"
+            AttributeType: "S"
+          # - AttributeName: "SubmittedAt"
+          #   AttributeType: "S"
+          # - AttributeName: "SubmittedBy"
+          #   AttributeType: "S"
+          # - AttributeName: "BoardInput"
+          #   AttributeType: "S"
+          # - AttributeName: "ConstraintString"
+          #   AttributeType: "S"
+          # - AttributeName: "BoardOutput"
+          #   AttributeType: "S"
+          # - AttributeName: "Description"
+          #   AttributeType: "S"
+        KeySchema:
+          - AttributeName: "SubmissionId"
+            KeyType: "HASH"
+        BillingMode: PAY_PER_REQUEST
