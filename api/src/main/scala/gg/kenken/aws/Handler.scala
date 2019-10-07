@@ -1,4 +1,4 @@
-package com.solvemykenken.aws
+package gg.kenken.aws
 
 import scala.jdk.CollectionConverters._
 import scala.beans.BeanProperty
@@ -10,7 +10,7 @@ import com.amazonaws.services.lambda.runtime.{Context, RequestHandler}
 import spray.json._
 import spray.json.DefaultJsonProtocol._
 
-import com.solvemykenken.KenKenSolver
+import gg.kenken.KenKenSolver
 
 case class ApiGatewayResponse(
   @BeanProperty statusCode: Integer,

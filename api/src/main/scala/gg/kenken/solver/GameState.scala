@@ -1,4 +1,4 @@
-package com.solvemykenken.solver
+package gg.kenken.solver
 
 import scala.io.Source
 import scala.language.reflectiveCalls
@@ -8,8 +8,8 @@ import scala.util.matching.Regex
 
 import com.typesafe.scalalogging.LazyLogging
 
-import com.solvemykenken.solver.Operator
-import com.solvemykenken.solver.Constraint
+import gg.kenken.solver.Operator
+import gg.kenken.solver.Constraint
 
 
 class GameState (

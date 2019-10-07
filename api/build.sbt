@@ -1,7 +1,7 @@
 import sbt.Keys._
 import sbt._
 
-name := "solvemykenken"
+name := "kenkengg"
 
 version := "1.0"
 
