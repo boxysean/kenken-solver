@@ -29,10 +29,6 @@ class App extends React.Component {
     document.addEventListener("keydown", this.escFunction.bind(this), false);
   }
 
-  componentWillUnmount() {
-    document.removeEventListener("keydown", this.escFunction.bind(this), false);
-  }
-
   reset() {
     this.setState({
       modal: false,
@@ -170,6 +166,10 @@ class App extends React.Component {
     this.processHover(id);
   }
 
+  isBoardFull() {
+    return Object.keys(this.state.cellToConstraint).length === this.state.boardSize * this.state.boardSize;
+  }
+
   render() {
     return (
       <div
@@ -198,7 +198,12 @@ class App extends React.Component {
           constraints={this.state.cellToConstraint}
           answers={this.state.answers}
         ></Board>
-        <SubmitButton onSubmit={this.submit.bind(this)}></SubmitButton>
+
+        <SubmitButton
+          onSubmit={this.submit.bind(this)}
+          canSubmit={this.isBoardFull()}
+        ></SubmitButton>
+
         <p style={{color: this.state.resultColor}}>{this.state.resultMessage}</p>
         <p>Aboot | GitHub | Contact</p>
       </div>
