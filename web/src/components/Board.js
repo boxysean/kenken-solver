@@ -5,6 +5,14 @@ import Cell from './Cell';
 import './Board.css';
 
 class Board extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      showTooltip: true,
+    }
+  }
+
   getCells(selectedCells) {
     var cells = [];
 
@@ -50,17 +58,44 @@ class Board extends React.Component {
     return cells;
   }
 
+  touchTooltip() {
+    this.setState({
+      showTooltip: false,
+    });
+  }
+
   render() {
+    var boardContainerStyle = {
+      'width': this.props.size * 64 + 4,
+      'height': this.props.size * 64 + 4,
+    };
+
     var gridColumnTemplateStyle = {
       'gridTemplateColumns': `repeat(${this.props.size}, 60px)`
     };
 
+    var tooltipDisplayStyle = {};
+
+    if (!this.state.showTooltip) {
+      tooltipDisplayStyle['display'] = 'none';
+    }
+
     return (
-      <div
-        className="Board"
-        style={gridColumnTemplateStyle}
-      >
-        {this.getCells(this.props.selectedCells).map(cell => cell)}
+      <div className="BoardContainer" style={boardContainerStyle}>
+        <div className="Board" style={gridColumnTemplateStyle}>
+          {this.getCells(this.props.selectedCells).map(cell => cell)}
+        </div>
+
+        <div
+          onMouseDown={(event) => this.touchTooltip()}
+          onTouchStart={(event) => this.touchTooltip()}
+          className="BoardTooltipContainer"
+          style={tooltipDisplayStyle}
+        >
+          <div className="BoardTooltip">
+            <p>Click/touch-and-drag to begin!</p>
+          </div>
+        </div>
       </div>
     );
   }
