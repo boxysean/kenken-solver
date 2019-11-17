@@ -1,5 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
+import { Spinner } from "react-loading-io";
 
 import Cell from './Cell';
 import './Board.css';
@@ -80,6 +81,12 @@ class Board extends React.Component {
       tooltipDisplayStyle['display'] = 'none';
     }
 
+    var loadingDisplayStyle = {};
+
+    if (!this.props.isSolving) {
+      loadingDisplayStyle['display'] = 'none';
+    }
+
     return (
       <div className="BoardContainer" style={boardContainerStyle}>
         <div className="Board" style={gridColumnTemplateStyle}>
@@ -93,8 +100,12 @@ class Board extends React.Component {
           style={tooltipDisplayStyle}
         >
           <div className="BoardTooltip">
-            <p>Click/touch-and-drag to begin!</p>
+            <p>{this.props.tooltip}</p>
           </div>
+        </div>
+
+        <div className="BoardLoading" style={loadingDisplayStyle}>
+          <Spinner color="#4CA7FD" size={100} />
         </div>
       </div>
     );

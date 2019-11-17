@@ -30,9 +30,8 @@
   font-size: 200%;
 }
 
-.ModalButton {
-  font-size: 200%;
-  margin: 10px;
+.ModalButtons > Button {
+  margin: 0.5em;
 }
 
 /* The Close Button */

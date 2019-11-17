@@ -206,19 +206,20 @@ class App extends React.Component {
           selectedCells={this.state.selected}
           constraints={this.state.cellToConstraint}
           answers={this.state.answers}
+          isSolving={this.state.solveLifecycle === "solving"}
+          tooltip="Click/touch-and-drag to begin!"
         ></Board>
 
         {this.state.solveLifecycle !== "success" &&
           <SolveButton
             onSubmit={this.submit.bind(this)}
-            canSubmit={this.isBoardFull()}
+            canSubmit={this.isBoardFull() && (this.state.solveLifecycle === "failed" || this.state.solveLifecycle === null)}
           ></SolveButton>
         }
 
         {this.state.solveLifecycle === "success" &&
           <ClearButton
             onSubmit={this.reset.bind(this)}
-            canSubmit={this.isBoardFull()}
           ></ClearButton>
         }
 
