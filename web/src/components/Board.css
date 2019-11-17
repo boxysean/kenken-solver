@@ -20,7 +20,7 @@
 
 .BoardTooltipContainer {
   z-index: 10;
-  color: #FF0000;
+  color: #000000;
   justify-content: center;
   display: flex;
   align-items: center;
@@ -31,4 +31,11 @@
   padding: 1em;
   margin: 2em;
   border-radius: 25px;
+}
+
+.BoardLoading {
+  z-index: 10;
+  justify-content: center;
+  display: flex;
+  align-items: center;
 }
