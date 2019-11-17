@@ -26,7 +26,7 @@ class Modal extends React.Component {
         <div className="ModalContent">
           <span onClick={(event) => this.close(event)} className="Close">&times;</span>
           <div>
-            <input autoFocus type="number" onChange={event => this.handleChange(event)}></input>
+            <input className="ModalInput" autoFocus type="number" onChange={event => this.handleChange(event)}></input>
           </div>
           <div>
             <button className="ModalButton" onClick={(event) => this.handleButton(event, "+")}>+</button>

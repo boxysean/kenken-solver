@@ -1,12 +1,20 @@
 import React from 'react';
+import Button from 'react-pushy-buttons';
 import './SubmitButton.css';
+import 'react-pushy-buttons/css/pushy-buttons.css'
 
 class SubmitButton extends React.Component {
   render() {
     return (
-      <button onClick={this.props.onSubmit}>
-        Solve!
-      </button>
+      <div className="ButtonWrapper">
+        <Button
+          size="lg"
+          color="blue"
+          onClick={this.props.onSubmit}
+        >
+          Solve!
+        </Button>
+      </div>
     );
   }
 }

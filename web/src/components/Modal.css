@@ -26,6 +26,10 @@
   width: 80%; /* Could be more or less, depending on screen size */
 }
 
+.ModalInput {
+  font-size: 200%;
+}
+
 .ModalButton {
   font-size: 200%;
   margin: 10px;
