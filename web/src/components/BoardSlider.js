@@ -9,14 +9,16 @@ class BoardSlider extends React.Component {
   render() {
     return (
       <div>
-        <p>Board Size: {this.props.boardSize}</p>
-        <input
-          type="range"
-          min="3"
-          max="9"
-          onChange={(event) => this.onChange(event)}
-          value={this.props.boardSize}
-        ></input>
+        <p>
+          <input
+            type="range"
+            min="3"
+            max="9"
+            onChange={(event) => this.onChange(event)}
+            value={this.props.boardSize}
+          ></input>
+          &nbsp;&nbsp;Board Size: {this.props.boardSize}
+        </p>
       </div>
     );
   }

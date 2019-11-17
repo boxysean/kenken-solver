@@ -15,7 +15,7 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      boardSize: 3,
+      boardSize: 5,
       modal: false,
       selected: new Set(),
       selecting: false,
@@ -23,6 +23,14 @@ class App extends React.Component {
       constraintCharToFormula: {},
       answers: [],
     };
+  }
+
+  componentDidMount() {
+    document.addEventListener("keydown", this.escFunction.bind(this), false);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("keydown", this.escFunction.bind(this), false);
   }
 
   reset() {
@@ -65,6 +73,12 @@ class App extends React.Component {
       selected: new Set(),
       selecting: false,
     });
+  }
+
+  escFunction(event) {
+    if (event.keyCode === 27) {
+      this.resetModal();
+    }
   }
 
   processModal(value, operator) {
@@ -165,10 +179,14 @@ class App extends React.Component {
         onTouchEnd={(event) => this.processRelease(event)}
       >
         <Helmet>
-          <title>kenken.gg</title>
+          <title>kenken.gg solver</title>
         </Helmet>
 
-        <p>Welcome to kenken.gg, the best KenKen solver! This is in beta mode. Click/touch-and-drag your mouse to begin!</p>
+        <h1 className="Title">kenken.gg solver</h1>
+        <BoardSlider
+          boardSize={this.state.boardSize}
+          onChange={this.changeBoardSize.bind(this)}
+        ></BoardSlider>
         {this.state.modal && <Modal processModal={this.processModal.bind(this)} closeModal={this.resetModal.bind(this)}></Modal>}
         <Board
           size={this.state.boardSize}
@@ -178,12 +196,10 @@ class App extends React.Component {
           constraints={this.state.cellToConstraint}
           answers={this.state.answers}
         ></Board>
-        <BoardSlider
-          boardSize={this.state.boardSize}
-          onChange={this.changeBoardSize.bind(this)}
-        ></BoardSlider>
         <SubmitButton onSubmit={this.submit.bind(this)}></SubmitButton>
+        <p>Click/touch-and-drag to begin!</p>
         <p style={{color: this.state.resultColor}}>{this.state.resultMessage}</p>
+        <p>Aboot | GitHub | Contact</p>
       </div>
     );
   }

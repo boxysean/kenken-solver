@@ -1,7 +1,7 @@
 .Cell {
   height: 60px;
   width: 60px;
-  border: 1px #cccccc solid;
+  border: 2px #cccccc solid;
   background-color: #ffffff;
   color: #000000;
 
@@ -20,17 +20,17 @@
 }
 
 .borderLeft {
-  border-left: 1px #000000 solid !important;
+  border-left: 2px #000000 solid !important;
 }
 
 .borderRight {
-  border-right: 1px #000000 solid !important;
+  border-right: 2px #000000 solid !important;
 }
 
 .borderTop {
-  border-top: 1px #000000 solid !important;
+  border-top: 2px #000000 solid !important;
 }
 
 .borderBottom {
-  border-bottom: 1px #000000 solid !important;
+  border-bottom: 2px #000000 solid !important;
 }
