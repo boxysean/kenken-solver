@@ -187,7 +187,9 @@ class App extends React.Component {
           boardSize={this.state.boardSize}
           onChange={this.changeBoardSize.bind(this)}
         ></BoardSlider>
+
         {this.state.modal && <Modal processModal={this.processModal.bind(this)} closeModal={this.resetModal.bind(this)}></Modal>}
+
         <Board
           size={this.state.boardSize}
           processHover={this.processHover.bind(this)}
@@ -197,7 +199,6 @@ class App extends React.Component {
           answers={this.state.answers}
         ></Board>
         <SubmitButton onSubmit={this.submit.bind(this)}></SubmitButton>
-        <p>Click/touch-and-drag to begin!</p>
         <p style={{color: this.state.resultColor}}>{this.state.resultMessage}</p>
         <p>Aboot | GitHub | Contact</p>
       </div>

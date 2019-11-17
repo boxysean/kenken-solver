@@ -1,4 +1,34 @@
+.BoardContainer {
+  position: relative;
+  text-align: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.BoardContainer > div {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
 .Board {
   text-align: center;
   display: grid;
+}
+
+.BoardTooltipContainer {
+  z-index: 10;
+  color: #FF0000;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+}
+
+.BoardTooltip {
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 1em;
+  margin: 2em;
+  border-radius: 25px;
 }
