@@ -1,12 +1,12 @@
 import React from 'react';
 import Button from 'react-pushy-buttons';
-import styles from './SubmitButton.css';
+import styles from './SolveButton.css';
 import 'react-pushy-buttons/css/pushy-buttons.css'
 import classNames from 'classnames/bind';
 
 let cx = classNames.bind(styles);
 
-class SubmitButton extends React.Component {
+class SolveButton extends React.Component {
   render() {
     let className = cx({
       ButtonWrapper: true,
@@ -17,7 +17,7 @@ class SubmitButton extends React.Component {
       <div className={className}>
         <Button
           size="lg"
-          color="blue"
+          color="green"
           onClick={this.props.onSubmit}
           disabled={!this.props.canSubmit}
         >
@@ -28,4 +28,4 @@ class SubmitButton extends React.Component {
   }
 }
 
-export default SubmitButton;
+export default SolveButton;

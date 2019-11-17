@@ -5,8 +5,9 @@ import './App.css';
 
 import Board from './components/Board';
 import BoardSlider from './components/BoardSlider';
+import ClearButton from './components/ClearButton';
 import Modal from './components/Modal';
-import SubmitButton from './components/SubmitButton';
+import SolveButton from './components/SolveButton';
 
 import update from 'immutability-helper';
 
@@ -22,6 +23,7 @@ class App extends React.Component {
       cellToConstraint: {},
       constraintCharToFormula: {},
       answers: [],
+      solveLifecycle: null,
     };
   }
 
@@ -37,6 +39,7 @@ class App extends React.Component {
       cellToConstraint: {},
       constraintCharToFormula: {},
       answers: [],
+      solveLifecycle: null,
     });
   }
 
@@ -125,6 +128,10 @@ class App extends React.Component {
     console.log(constraintString);
     console.log(boardStrings);
 
+    this.setState({
+      solveLifecycle: "solving",
+    })
+
     fetch("https://api.kenken.gg/solve", {
       method: "post",
       body: JSON.stringify({
@@ -139,12 +146,14 @@ class App extends React.Component {
           answers: data.boardOutput.split(/\s/),
           resultMessage: "Success!",
           resultColor: "#00ff00",
+          solveLifecycle: "success",
         });
       })
       .catch(error => {
         this.setState({
           resultMessage: "Fail solving! :-(",
           resultColor: "#ff0000",
+          solveLifecycle: "failure",
         });
         console.log(error);
       });
@@ -199,10 +208,19 @@ class App extends React.Component {
           answers={this.state.answers}
         ></Board>
 
-        <SubmitButton
-          onSubmit={this.submit.bind(this)}
-          canSubmit={this.isBoardFull()}
-        ></SubmitButton>
+        {this.state.solveLifecycle !== "success" &&
+          <SolveButton
+            onSubmit={this.submit.bind(this)}
+            canSubmit={this.isBoardFull()}
+          ></SolveButton>
+        }
+
+        {this.state.solveLifecycle === "success" &&
+          <ClearButton
+            onSubmit={this.reset.bind(this)}
+            canSubmit={this.isBoardFull()}
+          ></ClearButton>
+        }
 
         <p style={{color: this.state.resultColor}}>{this.state.resultMessage}</p>
         <p>Aboot | GitHub | Contact</p>
