@@ -23,11 +23,11 @@ class Modal extends React.Component {
   }
 
   componentDidMount() {
-    document.addEventListener("keydown", this.quickHandleInput.bind(this), false);
+    document.addEventListener("keydown", this.handleShortcut.bind(this), false);
   }
 
-  quickHandleInput(event) {
-    if ((['+', '-', 'x', '/']).indexOf(event.key) >= 0) {
+  handleShortcut(event) {
+    if (['+', '-', 'x', '/'].indexOf(event.key) >= 0) {
       this.handleButton(event, event.key);
     }
   }
