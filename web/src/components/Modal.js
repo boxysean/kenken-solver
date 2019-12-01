@@ -1,13 +1,32 @@
 import React from 'react';
+import _ from 'lodash';
 import Button from 'react-pushy-buttons';
 
 import './Modal.css';
 
 class Modal extends React.Component {
+  SHORTCUTS = ['+', '-', 'x', '/', '*'];
+
   handleChange({ target }) {
-    this.setState({
-      value: target.value,
+    // Handle shortcut
+    var foundShortcut = false;
+    var that = this;
+
+    _.forEach(target.value, function(ch) {
+      var shortcutIndex = that.SHORTCUTS.indexOf(ch);
+
+      if (shortcutIndex >= 0) {
+        var operator = that.SHORTCUTS[shortcutIndex];
+        that.handleButton(null, operator);
+        foundShortcut = true;
+      }
     });
+
+    if (!foundShortcut) {
+      this.setState({
+        value: target.value,
+      });
+    }
   }
 
   handleButton(event, operator) {
@@ -22,16 +41,6 @@ class Modal extends React.Component {
     this.props.closeModal();
   }
 
-  componentDidMount() {
-    document.addEventListener("keydown", this.handleShortcut.bind(this), false);
-  }
-
-  handleShortcut(event) {
-    if (['+', '-', 'x', '/'].indexOf(event.key) >= 0) {
-      this.handleButton(event, event.key);
-    }
-  }
-
   render() {
     return (
       <div className="Modal ModalOn">
@@ -41,7 +50,6 @@ class Modal extends React.Component {
             <input
               className="ModalInput"
               autoFocus
-              type="number"
               onChange={event => this.handleChange(event)}>
             </input>
           </div>

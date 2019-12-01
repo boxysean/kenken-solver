@@ -1,0 +1,6 @@
+.LoadingSpinner {
+  z-index: 10;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+}

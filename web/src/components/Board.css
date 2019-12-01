@@ -16,25 +16,3 @@
   text-align: center;
   display: grid;
 }
-
-.BoardTooltipContainer {
-  z-index: 10;
-  color: #000000;
-  justify-content: center;
-  display: flex;
-  align-items: center;
-}
-
-.BoardTooltip {
-  background-color: rgba(0, 0, 0, 0.2);
-  padding: 1em;
-  margin: 2em;
-  border-radius: 25px;
-}
-
-.BoardLoading {
-  z-index: 10;
-  justify-content: center;
-  display: flex;
-  align-items: center;
-}
