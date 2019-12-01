@@ -1,9 +1,7 @@
 import React from 'react';
 import { Spinner } from "react-loading-io";
 
-import SolveLifecycle from "../SolveLifecycle";
-
-import './Spinner.css';
+import './LoadingSpinner.css';
 
 class LoadingSpinner extends React.Component {
   constructor(props) {
