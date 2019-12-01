@@ -4,6 +4,7 @@ import { Spinner } from "react-loading-io";
 
 import Cell from './Cell';
 import './Board.css';
+import SolveLifecycle from '../SolveLifecycle';
 
 class Board extends React.Component {
   constructor(props) {
@@ -71,6 +72,10 @@ class Board extends React.Component {
       'height': this.props.size * 64 + 4,
     };
 
+    if ([SolveLifecycle.Inputting, SolveLifecycle.Failure].indexOf(this.props.solveLifecycle) >= 0) {
+      boardContainerStyle['cursor'] = 'pointer';
+    }
+
     var gridColumnTemplateStyle = {
       'gridTemplateColumns': `repeat(${this.props.size}, 60px)`
     };
@@ -83,7 +88,7 @@ class Board extends React.Component {
 
     var loadingDisplayStyle = {};
 
-    if (!this.props.isSolving) {
+    if (this.props.solveLifecycle !== SolveLifecycle.Pending) {
       loadingDisplayStyle['display'] = 'none';
     }
 

@@ -8,22 +8,27 @@ import BoardSlider from './components/BoardSlider';
 import ClearButton from './components/ClearButton';
 import Modal from './components/Modal';
 import SolveButton from './components/SolveButton';
+import SolveLifecycle from './SolveLifecycle';
 
 import update from 'immutability-helper';
 
 class App extends React.Component {
+  DEFAULT_STATE = {
+    modal: false,
+    selected: new Set(),
+    selecting: false,
+    cellToConstraint: {},
+    constraintCharToFormula: {},
+    answers: [],
+    solveLifecycle: SolveLifecycle.Inputting,
+  };
+
   constructor(props) {
     super(props);
 
     this.state = {
       boardSize: 5,
-      modal: false,
-      selected: new Set(),
-      selecting: false,
-      cellToConstraint: {},
-      constraintCharToFormula: {},
-      answers: [],
-      solveLifecycle: null,
+      ...this.DEFAULT_STATE,
     };
   }
 
@@ -32,22 +37,16 @@ class App extends React.Component {
   }
 
   reset() {
-    this.setState({
-      modal: false,
-      selected: new Set(),
-      selecting: false,
-      cellToConstraint: {},
-      constraintCharToFormula: {},
-      answers: [],
-      solveLifecycle: null,
-    });
+    this.setState(this.DEFAULT_STATE);
   }
 
   processBegin(cellIndex) {
-    this.setState({
-      selected: new Set([cellIndex]),
-      selecting: true,
-    });
+    if ([SolveLifecycle.Inputting, SolveLifecycle.Failure].indexOf(this.state.solveLifecycle) >= 0) {
+      this.setState({
+        selected: new Set([cellIndex]),
+        selecting: true,
+      });
+    }
   }
 
   processHover(cellIndex) {
@@ -129,7 +128,7 @@ class App extends React.Component {
     console.log(boardStrings);
 
     this.setState({
-      solveLifecycle: "solving",
+      solveLifecycle: SolveLifecycle.Pending,
     })
 
     fetch("https://api.kenken.gg/solve", {
@@ -146,14 +145,14 @@ class App extends React.Component {
           answers: data.boardOutput.split(/\s/),
           resultMessage: "Success!",
           resultColor: "#00ff00",
-          solveLifecycle: "success",
+          solveLifecycle: SolveLifecycle.Success,
         });
       })
       .catch(error => {
         this.setState({
           resultMessage: "Fail solving! :-(",
           resultColor: "#ff0000",
-          solveLifecycle: "failure",
+          solveLifecycle: SolveLifecycle.Failure,
         });
         console.log(error);
       });
@@ -197,7 +196,12 @@ class App extends React.Component {
           onChange={this.changeBoardSize.bind(this)}
         ></BoardSlider>
 
-        {this.state.modal && <Modal processModal={this.processModal.bind(this)} closeModal={this.resetModal.bind(this)}></Modal>}
+        {this.state.modal &&
+          <Modal
+            processModal={this.processModal.bind(this)}
+            closeModal={this.resetModal.bind(this)}
+          ></Modal>
+        }
 
         <Board
           size={this.state.boardSize}
@@ -206,18 +210,18 @@ class App extends React.Component {
           selectedCells={this.state.selected}
           constraints={this.state.cellToConstraint}
           answers={this.state.answers}
-          isSolving={this.state.solveLifecycle === "solving"}
+          solveLifecycle={this.state.solveLifecycle}
           tooltip="Click/touch-and-drag to begin!"
         ></Board>
 
-        {this.state.solveLifecycle !== "success" &&
+        {this.state.solveLifecycle !== SolveLifecycle.Success &&
           <SolveButton
             onSubmit={this.submit.bind(this)}
-            canSubmit={this.isBoardFull() && (this.state.solveLifecycle === "failed" || this.state.solveLifecycle === null)}
+            canSubmit={this.isBoardFull() && [SolveLifecycle.Failure, SolveLifecycle.Inputting].indexOf(this.state.solveLifecycle) >= 0}
           ></SolveButton>
         }
 
-        {this.state.solveLifecycle === "success" &&
+        {this.state.solveLifecycle === SolveLifecycle.Success &&
           <ClearButton
             onSubmit={this.reset.bind(this)}
           ></ClearButton>
