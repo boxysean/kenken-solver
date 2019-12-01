@@ -1,5 +1,5 @@
 import React from 'react';
-import {Helmet} from 'react-helmet';
+import { Helmet } from 'react-helmet';
 import _ from 'lodash';
 import './App.css';
 
@@ -9,6 +9,8 @@ import ClearButton from './components/ClearButton';
 import Modal from './components/Modal';
 import SolveButton from './components/SolveButton';
 import SolveLifecycle from './SolveLifecycle';
+import LoadingSpinner from './components/LoadingSpinner';
+import Tooltip from './components/Tooltip';
 
 import update from 'immutability-helper';
 
@@ -23,11 +25,23 @@ class App extends React.Component {
     solveLifecycle: SolveLifecycle.Inputting,
   };
 
+  TOOLTIP_MESSAGE = {};  // Why can't I set an object key with a dot?
+  TOOLTIP_COLOR = {};
+
   constructor(props) {
     super(props);
 
+    this.TOOLTIP_MESSAGE[SolveLifecycle.Success] = "Success!";
+    this.TOOLTIP_MESSAGE[SolveLifecycle.Failure] = "Fail solving! :-(";
+    this.TOOLTIP_MESSAGE[SolveLifecycle.Inputting] = "Click/touch-and-drag to begin!";
+
+    this.TOOLTIP_COLOR[SolveLifecycle.Success] = "rgba(0, 255, 0, 0.3)";
+    this.TOOLTIP_COLOR[SolveLifecycle.Failure] = "rgba(255, 0, 0, 0.3)";
+    this.TOOLTIP_COLOR[SolveLifecycle.Inputting] = "rgba(0, 0, 0, 0.3)";
+
     this.state = {
       boardSize: 5,
+      showTooltip: true,
       ...this.DEFAULT_STATE,
     };
   }
@@ -129,6 +143,7 @@ class App extends React.Component {
 
     this.setState({
       solveLifecycle: SolveLifecycle.Pending,
+      showTooltip: false,
     })
 
     fetch("https://api.kenken.gg/solve", {
@@ -143,16 +158,14 @@ class App extends React.Component {
         console.log(data.boardOutput);
         this.setState({
           answers: data.boardOutput.split(/\s/),
-          resultMessage: "Success!",
-          resultColor: "#00ff00",
           solveLifecycle: SolveLifecycle.Success,
+          showTooltip: true,
         });
       })
       .catch(error => {
         this.setState({
-          resultMessage: "Fail solving! :-(",
-          resultColor: "#ff0000",
           solveLifecycle: SolveLifecycle.Failure,
+          showTooltip: true,
         });
         console.log(error);
       });
@@ -176,6 +189,12 @@ class App extends React.Component {
 
   isBoardFull() {
     return Object.keys(this.state.cellToConstraint).length === this.state.boardSize * this.state.boardSize;
+  }
+
+  touchTooltip() {
+    this.setState({
+      showTooltip: false,
+    });
   }
 
   render() {
@@ -211,8 +230,17 @@ class App extends React.Component {
           constraints={this.state.cellToConstraint}
           answers={this.state.answers}
           solveLifecycle={this.state.solveLifecycle}
-          tooltip="Click/touch-and-drag to begin!"
-        ></Board>
+        >
+          <Tooltip
+            touchTooltip={this.touchTooltip.bind(this)}
+            showTooltip={this.state.showTooltip}
+            color={this.TOOLTIP_COLOR[this.state.solveLifecycle]}
+          >
+            <p>{this.TOOLTIP_MESSAGE[this.state.solveLifecycle]}</p>
+          </Tooltip>
+
+          <LoadingSpinner showSpinner={this.state.solveLifecycle === SolveLifecycle.Pending} />
+        </Board>
 
         {this.state.solveLifecycle !== SolveLifecycle.Success &&
           <SolveButton
@@ -227,7 +255,6 @@ class App extends React.Component {
           ></ClearButton>
         }
 
-        <p style={{color: this.state.resultColor}}>{this.state.resultMessage}</p>
         <p>Aboot | GitHub | Contact</p>
       </div>
     );

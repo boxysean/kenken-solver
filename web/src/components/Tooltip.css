@@ -1,0 +1,36 @@
+.TooltipContainer {
+  z-index: 10;
+  color: #000000;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+}
+
+.Tooltip {
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 1em;
+  margin: 2em;
+  border-radius: 25px;
+}
+
+.Tooltip-enter {
+  opacity: 0;
+}
+
+.Tooltip-enter-active {
+  opacity: 1;
+  transition: opacity 200ms;
+}
+
+.Tooltip-exit {
+  opacity: 1;
+}
+
+.Tooltip-exit-active {
+  opacity: 0;
+  transition: opacity 200ms;
+}
+
+.Tooltip-exit-done {
+  display: none;
+}
