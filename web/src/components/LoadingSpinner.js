@@ -4,10 +4,6 @@ import { Spinner } from "react-loading-io";
 import './LoadingSpinner.css';
 
 class LoadingSpinner extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     var loadingDisplayStyle = {};
 
