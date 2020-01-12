@@ -65,7 +65,8 @@ class App extends React.Component {
   }
 
   processHover(cellIndex) {
-    if (this.state.selecting) {
+    // There's a bug in mobile Firefox, where cellIndex can be NaN
+    if (this.state.selecting && cellIndex !== NaN) {
       this.setState({
         selected: this.state.selected.add(cellIndex),
       });
@@ -111,10 +112,7 @@ class App extends React.Component {
         this.state.cellToConstraint,
         Array.from(this.state.selected)
           .reduce(function(obj, x) {
-            if (x !== NaN) {  // There's a bug in mobile Firefox, where x can be NaN
-              obj[x] = {$set: {"name": nextConstraintChar, "formula": formula}};
-            }
-
+            obj[x] = {$set: {"name": nextConstraintChar, "formula": formula}};
             return obj;
           }, {})
       ),
