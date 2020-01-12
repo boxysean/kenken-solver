@@ -6,10 +6,10 @@ import './App.css';
 import Board from './components/Board';
 import BoardSlider from './components/BoardSlider';
 import ClearButton from './components/ClearButton';
+import LoadingSpinner from './components/LoadingSpinner';
 import Modal from './components/Modal';
 import SolveButton from './components/SolveButton';
 import SolveLifecycle from './SolveLifecycle';
-import LoadingSpinner from './components/LoadingSpinner';
 import Tooltip from './components/Tooltip';
 
 import update from 'immutability-helper';
@@ -42,6 +42,7 @@ class App extends React.Component {
     this.state = {
       boardSize: 5,
       showTooltip: true,
+      debugOverlay: window.location.href.includes("debug=true"),
       ...this.DEFAULT_STATE,
     };
   }
@@ -197,6 +198,10 @@ class App extends React.Component {
     });
   }
 
+  canSubmit() {
+    return this.isBoardFull() && [SolveLifecycle.Failure, SolveLifecycle.Inputting].indexOf(this.state.solveLifecycle) >= 0;
+  }
+
   render() {
     return (
       <div
@@ -245,7 +250,7 @@ class App extends React.Component {
         {this.state.solveLifecycle !== SolveLifecycle.Success &&
           <SolveButton
             onSubmit={this.submit.bind(this)}
-            canSubmit={this.isBoardFull() && [SolveLifecycle.Failure, SolveLifecycle.Inputting].indexOf(this.state.solveLifecycle) >= 0}
+            canSubmit={this.canSubmit()}
           ></SolveButton>
         }
 
@@ -253,6 +258,14 @@ class App extends React.Component {
           <ClearButton
             onSubmit={this.reset.bind(this)}
           ></ClearButton>
+        }
+
+        {this.state.debugOverlay &&
+          <ul>
+            <li>Can Submit? {this.canSubmit() ? "yes!" : "no"}</li>
+            <li>State? {this.state.solveLifecycle}</li>
+            <li>Board full? {this.isBoardFull() ? "yes!" : "no"}</li>
+          </ul>
         }
 
         <p>Aboot | GitHub | Contact</p>
