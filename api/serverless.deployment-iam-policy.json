@@ -48,7 +48,8 @@
         "s3:SetBucketEncryption",
         "s3:GetEncryptionConfiguration",
         "s3:PutEncryptionConfiguration",
-        "s3:PutBucketPolicy"
+        "s3:PutBucketPolicy",
+        "s3:DeleteBucketPolicy"
       ],
       "Resource": [
         "arn:aws:s3:::*kenken*serverlessdeploy*",

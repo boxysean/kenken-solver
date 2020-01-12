@@ -8,6 +8,12 @@ provider:
   runtime: java8
   cfnRole: "arn:aws:iam::858316752957:role/serverless-deployment"
   timeout: 10
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:PutItem"
+      Resource:
+        - "arn:aws:dynamodb:*:*:table/*Kenken*"
 
 stage: prod
 region: us-east-1
