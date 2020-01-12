@@ -265,6 +265,8 @@ class App extends React.Component {
             <li>Can Submit? {this.canSubmit() ? "yes!" : "no"}</li>
             <li>State? {this.state.solveLifecycle}</li>
             <li>Board full? {this.isBoardFull() ? "yes!" : "no"}</li>
+            <li>Board cells filled? {Object.keys(this.state.cellToConstraint).length}</li>
+            <li>Board size? {this.state.boardSize}</li>
           </ul>
         }
 
