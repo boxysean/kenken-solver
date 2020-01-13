@@ -13,10 +13,12 @@ class Cell extends React.Component {
   }
 
   render() {
+    console.log(this.props.constraint);
+
     let className = cx({
       Cell: true,
       isSelected: this.props.isSelected,
-      isGreyedOut: this.props.constraint == null && this.props.display.length === 0,
+      isGreyedOut: this.props.constraint != null,
       borderLeft: this.props.borders.left,
       borderRight: this.props.borders.right,
       borderTop: this.props.borders.top,
