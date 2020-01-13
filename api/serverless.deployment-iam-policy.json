@@ -101,6 +101,15 @@
     {
       "Effect": "Allow",
       "Action": [
+        "apigateway:UpdateRestApiPolicy"
+      ],
+      "Resource": [
+        "arn:aws:apigateway:*::/restapis*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
         "iam:PassRole"
       ],
       "Resource": [
