@@ -4,6 +4,7 @@
   border: 2px #cccccc solid;
   background-color: #ffffff;
   color: #000000;
+  margin: -1px;  /* Makes everything snug! */
 
   -webkit-touch-callout: none;
   -webkit-user-select: none;

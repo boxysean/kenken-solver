@@ -1,6 +1,8 @@
 import React from 'react';
 import { CSSTransition } from 'react-transition-group';
 
+import './Tooltip.css';
+
 
 class Tooltip extends React.Component {
   render() {
