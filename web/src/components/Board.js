@@ -53,8 +53,8 @@ class Board extends React.Component {
 
   render() {
     var boardContainerStyle = {
-      'width': this.props.size * 64 + 4,
-      'height': this.props.size * 64 + 4,
+      'width': this.props.size * 60 + 4,
+      'height': this.props.size * 60 + 4,
     };
 
     if ([SolveLifecycle.Inputting, SolveLifecycle.Failure].indexOf(this.props.solveLifecycle) >= 0) {
