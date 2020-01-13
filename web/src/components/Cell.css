@@ -1,7 +1,7 @@
 .Cell {
-  height: 60px;
-  width: 60px;
-  border: 2px #cccccc solid;
+  height: 50px;
+  width: 50px;
+  border: 2px #b0b0b0 solid;
   background-color: #ffffff;
   color: #000000;
   margin: -1px;  /* Makes everything snug! */
@@ -17,7 +17,11 @@
 }
 
 .isSelected {
-  background-color: yellow;
+  background-color: yellow !important;
+}
+
+.isGreyedOut {
+  background-color: #cccccc;
 }
 
 .borderLeft {
