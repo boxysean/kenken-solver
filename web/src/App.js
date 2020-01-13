@@ -32,8 +32,8 @@ class App extends React.Component {
     super(props);
 
     this.TOOLTIP_MESSAGE[SolveLifecycle.Success] = "Success!";
-    this.TOOLTIP_MESSAGE[SolveLifecycle.Failure] = "Fail solving! :-(";
-    this.TOOLTIP_MESSAGE[SolveLifecycle.Inputting] = "Click/touch-and-drag to begin!";
+    this.TOOLTIP_MESSAGE[SolveLifecycle.Failure] = "Failed solving! :-(";
+    this.TOOLTIP_MESSAGE[SolveLifecycle.Inputting] = "Draw your KenKen board here!";
 
     this.TOOLTIP_COLOR[SolveLifecycle.Success] = "rgba(0, 255, 0, 0.3)";
     this.TOOLTIP_COLOR[SolveLifecycle.Failure] = "rgba(255, 0, 0, 0.3)";

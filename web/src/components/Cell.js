@@ -16,6 +16,7 @@ class Cell extends React.Component {
     let className = cx({
       Cell: true,
       isSelected: this.props.isSelected,
+      isGreyedOut: this.props.constraint == null && this.props.display.length === 0,
       borderLeft: this.props.borders.left,
       borderRight: this.props.borders.right,
       borderTop: this.props.borders.top,
