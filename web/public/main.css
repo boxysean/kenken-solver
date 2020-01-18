@@ -35,3 +35,7 @@ a {
 a:visited {
   color: #0086e2;
 }
+
+.notices {
+  font-size: 50%;
+}
