@@ -214,10 +214,10 @@ class App extends React.Component {
         onTouchEnd={(event) => this.processRelease(event)}
       >
         <Helmet>
-          <title>kenken.gg solver</title>
+          <title>KenKen Solver</title>
         </Helmet>
 
-        <h1 className="Title">kenken.gg solver</h1>
+        <h1 className="Title">KenKen Solver</h1>
         <BoardSlider
           boardSize={this.state.boardSize}
           onChange={this.changeBoardSize.bind(this)}
@@ -274,7 +274,7 @@ class App extends React.Component {
           </ul>
         }
 
-        <p>Aboot | GitHub | Contact</p>
+        <p>Aboot | <a href="https://github.com/boxysean/kenken.gg">GitHub</a> | <a href="">Email</a></p>
       </div>
     );
   }
