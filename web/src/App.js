@@ -214,10 +214,10 @@ class App extends React.Component {
         onTouchEnd={(event) => this.processRelease(event)}
       >
         <Helmet>
-          <title>KenKen Solver</title>
+          <title>kenken.gg</title>
         </Helmet>
 
-        <h1 className="Title">KenKen Solver</h1>
+        <h1 className="Title">kenken.gg</h1>
 
         <BoardSlider
           boardSize={this.state.boardSize}
