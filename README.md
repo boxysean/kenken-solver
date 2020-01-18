@@ -1,10 +1,9 @@
 [kenken.gg](https://kenken.gg/)
 ===============================
 
-**The laziest KenKen solver online!**
+*The laziest KenKen solver online!*
 
-About this repository
----------------------
+### About this repository
 
 Contains two applications that work in tandem:
 
@@ -13,13 +12,11 @@ Contains two applications that work in tandem:
 
 They are deployed using GitHub Actions.
 
-Reporting issues
-----------------
+### Reporting issues
 
-If you find something that isn't working as you might expect, please open a GitHub issue
+If you find something that isn't working as you might expect, please open a GitHub issue.
 
-Legal notice
-------------
+### Legal notice
 
 - KenKen is a trademark of [Nextoy LLC](https://www.nextoy.com/). Neither boxysean nor kenken.gg claims no ownership over the KenKen trademark.
 - kenken.gg is unaffiliated with Nextoy LLC and is not endorsed by Nextoy LLC.
