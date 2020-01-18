@@ -218,6 +218,7 @@ class App extends React.Component {
         </Helmet>
 
         <h1 className="Title">KenKen Solver</h1>
+
         <BoardSlider
           boardSize={this.state.boardSize}
           onChange={this.changeBoardSize.bind(this)}
@@ -274,7 +275,7 @@ class App extends React.Component {
           </ul>
         }
 
-        <p>Aboot | <a href="https://github.com/boxysean/kenken.gg">GitHub</a> | <a href="">Email</a></p>
+        <p><a href="/about.html">About</a> | <a href="https://github.com/boxysean/kenken.gg">GitHub</a> | Contact</p>
       </div>
     );
   }

@@ -1,0 +1,26 @@
+html {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Raleway, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(to bottom right, red, yellow);
+}
+
+.Container {
+  text-align: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: calc(10px + 2vmin);
+  color: black;
+}
+
+.InnerContainer {
+  max-width: 600px;
+  text-align: left;
+}
