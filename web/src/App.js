@@ -275,7 +275,7 @@ class App extends React.Component {
           </ul>
         }
 
-        <p><a href="/about.html">About</a> | <a href="https://github.com/boxysean/kenken.gg">GitHub</a> | Contact</p>
+        <p><a href="/about.html">About</a></p>
       </div>
     );
   }
